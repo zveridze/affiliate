@@ -8,14 +8,17 @@
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-        <title>home page</title>
+        <title>login form</title>
     </head>
     <body>
 
-        <div>
-            <a href="/login"><button>go to login form</button></a>
-            <a href="/register"><button>go to register form</button></a>
-        </div>
+        <a href="/"><button>homepage</button></a>
+        <form method="POST" action="/check_login_pass">
+            <h1>login form</h1>
+            <p><input name="email" value="email must be here"></p>
+            <p><input type="password" name="pass"></p>
+            <p><input type="submit"></p>
+        </form>
 
         <!-- Optional JavaScript -->
         <!-- jQuery first, then Popper.js, then Bootstrap JS -->
