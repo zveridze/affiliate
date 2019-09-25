@@ -1,4 +1,8 @@
 from flask import Flask, render_template
+from functions import check_db_schema
+
+DB_NAME = 'users.db'
+
 
 app = Flask(__name__)
 
@@ -9,4 +13,6 @@ def index():
 
 
 if __name__ == '__main__':
+    print('gg')
+    print(check_db_schema(DB_NAME))
     app.run(debug=False)
