@@ -1,11 +1,21 @@
 import sqlite3
 
 
-def do_sql(specific_db_name, specific_sql):
+def execute_in_sqlite(specific_db_name, specific_sql):
     conn = sqlite3.connect(specific_db_name)
     cursor = conn.cursor()
     cursor.execute(specific_sql)
-    result = cursor.fetchall()
     cursor.close()
+    conn.commit()
     conn.close()
-    return result
+
+
+def return_from_sqlite(specific_db_name, specific_sql):
+    conn = sqlite3.connect(specific_db_name)
+    cursor = conn.cursor()
+    cursor.execute(specific_sql)
+    fetchalled = cursor.fetchall()
+    cursor.close()
+    conn.commit()
+    conn.close()
+    return fetchalled

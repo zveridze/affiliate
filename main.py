@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from functions import do_sql
+from functions import execute_in_sqlite, return_from_sqlite
 
 DB_NAME = 'users.db'
 SQL_WHAT_TABLES = "SELECT name FROM sqlite_master WHERE type='table';"
@@ -42,8 +42,9 @@ def write_to_database():
         pair_key_value_from_request = dict(request.form)
         email = pair_key_value_from_request['email']
         password = pair_key_value_from_request['password']
-        new_query = "SELECT email FROM users where email = {0}".format(email)
-        print(do_sql(DB_NAME, new_query))
+        new_query = "SELECT email FROM users WHERE email = '{0}';".format(email)
+        if return_from_sqlite(DB_NAME, new_query):
+
         return render_template('cabinet.html', email=email, password=password)
     else:
         return 'method must be POST!'
@@ -51,8 +52,8 @@ def write_to_database():
 
 if __name__ == '__main__':
     # TODO проверять не только существование, но и структуру
-    if not do_sql(DB_NAME, SQL_WHAT_TABLES):
-        do_sql(DB_NAME, SQL_CREATE_TABLES)
-        do_sql(DB_NAME, SQL_CREATE_TESTER)
+    if not return_from_sqlite(DB_NAME, SQL_WHAT_TABLES):
+        execute_in_sqlite(DB_NAME, SQL_CREATE_TABLES)
+        execute_in_sqlite(DB_NAME, SQL_CREATE_TESTER)
 
     app.run(debug=False)
