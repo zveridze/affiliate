@@ -9,7 +9,7 @@ SQL_CREATE_TABLES = "CREATE TABLE users" \
                     " password TEXT NOT NULL);"
 SQL_CREATE_TESTER = "INSERT INTO users (email, password) VALUES ( 'tester', 'testerpass' );"
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='app/templates')
 
 
 @app.route('/')
@@ -43,9 +43,10 @@ def write_to_database():
         email = pair_key_value_from_request['email']
         password = pair_key_value_from_request['password']
         new_query = "SELECT email FROM users WHERE email = '{0}';".format(email)
+        print(bool(return_from_sqlite(DB_NAME, new_query)))
         if return_from_sqlite(DB_NAME, new_query):
-
-        return render_template('cabinet.html', email=email, password=password)
+            return render_template('cabinet.html', email=email, password=password)
+        return 'надо писать в таблицу'
     else:
         return 'method must be POST!'
 
