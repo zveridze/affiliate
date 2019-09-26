@@ -18,3 +18,8 @@ if __name__ == '__main__':
 
 
 from app import models, routes
+
+
+@login.user_loader
+def load_user(ID):
+    return models.User.query.get(int(ID))
