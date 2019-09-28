@@ -18,8 +18,8 @@ class RegistrationForm(FlaskForm):
     phone = IntegerField('Phone')
     messenger_type = StringField('Messenger type')
     messenger = StringField('Messenger')
-    password = StringField('Password', validators=[DataRequired()])
-    password2 = StringField('Repeat password', validators=[DataRequired(), EqualTo('password')])
+    password = PasswordField('Password', validators=[DataRequired()])
+    password2 = PasswordField('Repeat password', validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('Sign Up')
 
     def validate_email(self, email):

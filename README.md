@@ -1,2 +1,1 @@
-# associated
-partner link management
+### Affiliate program
