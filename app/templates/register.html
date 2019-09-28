@@ -2,14 +2,13 @@
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block content %}
-    <div class="d-flex justify-content-center align-items-center container ">
-    <div class="col-lg-5 align-items-center">
+    <div class="d-flex justify-content-center align-items-center container">
+    <div class="col-lg-4 align-items-left shadow-lg p-3 mb-5 bg-white rounded">
     <form action="" method="post">
         {{ form.hidden_tag() }}
         {{ wtf.form_field(form.email, class='form-control', placeholder='your@email.com') }}
         {{ wtf.form_field(form.first_name, class='form-control', placeholder='Your first name') }}
         {{ wtf.form_field(form.last_name, class='form-control', placeholder='Your last name') }}
-        {{ wtf.form_field(form.phone, class='form-control', placeholder='Your Phone') }}
         {{ wtf.form_field(form.messenger_type, class='form-control') }}
         {{ wtf.form_field(form.messenger, class='form-control', placeholder='Messenger ID') }}
         {{ wtf.form_field(form.password, class='form-control', placeholder='Password') }}

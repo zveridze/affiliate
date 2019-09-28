@@ -10,13 +10,6 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/dashboard')
-@login_required
-def dashboard():
-    user = current_user
-    return render_template('dashboard.html', user=user, session=session)
-
-
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -27,7 +20,7 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
 
         if not user or not user.check_password(form.password.data):
-            flash('Most likely you have entered incorrect e-mail or password.')
+            flash('User with provided credentials does not exist.')
             return redirect(url_for('login'))
 
         login_user(user, remember=form.remember_me.data)
@@ -43,17 +36,21 @@ def register():
     form = RegistrationForm()
 
     if form.validate_on_submit():
-        user = User(email=form.email.data,
-                    first_name=form.first_name.data,
-                    last_name=form.last_name.data,
-                    messenger_type=form.messenger_type.data,
-                    messenger=form.messenger.data)
+        check_user = User.query.filter_by(email=form.email.data).first()
+        if not check_user:
+            user = User(email=form.email.data,
+                        first_name=form.first_name.data,
+                        last_name=form.last_name.data,
+                        messenger_type=form.messenger_type.data,
+                        messenger=form.messenger.data)
 
-        user.set_password(form.password.data)
-        db.session.add(user)
-        db.session.commit()
-        flash('Registration completed successfully')
-        return redirect(url_for('index'))
+            user.set_password(form.password.data)
+            db.session.add(user)
+            db.session.commit()
+            flash('Registration completed successfully')
+            return redirect(url_for('index'))
+        else:
+            flash('Sorry, email already exist.')
     return render_template('register.html', form=form)
 
 
@@ -61,3 +58,16 @@ def register():
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
+
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    user = current_user
+    return render_template('dashboard.html', user=user, session=session)
+
+
+@app.route('/profile')
+def profile():
+    user = current_user
+    return render_template('profile.html', user=user)
