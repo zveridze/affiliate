@@ -6,14 +6,14 @@
 {% endblock %}
 
 {% block content %}
-    <div class="d-flex justify-content-center align-items-center container ">
-    <div class="col-lg-4 align-items-center">
+    <div class="d-flex justify-content-center align-items-center container">
+    <div class="col-lg-4 align-items-center shadow-lg p-3 mb-5 bg-white rounded">
     <form action="" method="post" class="form" role="form" >
         {{ form.hidden_tag() }}
         {{ wtf.form_field(form.email, class='form-control', placeholder='your@email.com') }}
         {{ wtf.form_field(form.password, class='form-control', placeholder='password') }}
         {{ wtf.form_field(form.remember_me, class='form-check-label') }}
-        <p><input type=submit class='btn btn-primary'>
+        <p><input type=submit class='btn btn-primary btn-block'>
     </form>
     {% with messages = get_flashed_messages() %}
         {% if messages %}
@@ -22,6 +22,8 @@
             {% endfor %}
         {% endif %}
     {% endwith %}
+    <hr/>
+       <p>Do not have account?<a href="{{ url_for('register') }}"> Signup</a></p>
     </div>
     </div>
 {% endblock %}
