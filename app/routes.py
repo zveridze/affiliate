@@ -1,8 +1,8 @@
 from flask import render_template, redirect, url_for, flash, session
 from flask_login import current_user, login_user, login_required, logout_user
-from app.forms import LoginForm, RegistrationForm
+from app.forms import LoginForm, RegistrationForm, LinkForm
 from app import app, db
-from app.models import User
+from app.models import User, Link
 
 
 @app.route('/')
@@ -71,3 +71,17 @@ def dashboard():
 def profile():
     user = current_user
     return render_template('profile.html', user=user)
+
+
+@app.route('/links', methods=['get', 'post'])
+@login_required
+def links():
+    links_list = Link.query.filter_by(user_id=current_user.id).order_by(Link.timestamp.desc()).all()
+    form = LinkForm()
+    if form.validate_on_submit():
+        link = Link(name=form.name.data, user_id=current_user.id)
+        db.session.add(link)
+        db.session.commit()
+        return redirect(url_for('links'))
+
+    return render_template('links.html', form=form, links_list=links_list)

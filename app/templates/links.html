@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block content %}
+    <form action="" method="post" class="form-inline" role="form" >
+        {{ form.hidden_tag() }}
+         <div class="form-group mx-sm-3 mb-2">
+            {{ wtf.form_field(form.name, class='form-control', placeholder='Create your affiliate link') }}
+         </div>
+        <input type=submit class='btn btn-primary mb-2'>
+    </form>
+    <div class="container-fluid">
+    <div class="row">
+    {% if form %}
+
+    {% endif %}
+    </div>
+    <table class="table table-striped">
+    <thead>
+    <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Link</th>
+        <th scope="col">Date</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for link in links_list %}
+        <tr>
+        <th>{{ link.name }}</th>
+        <th>{{ link.url }}/{{ link.hash_str }}</th>
+        <th>{{ link.timestamp }}</th>
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+    </div>
+{% endblock %}
