@@ -13,7 +13,7 @@
         {{ wtf.form_field(form.email, class='form-control', placeholder='your@email.com') }}
         {{ wtf.form_field(form.password, class='form-control', placeholder='password') }}
         {{ wtf.form_field(form.remember_me, class='form-check-label') }}
-        <p><input type=submit class='btn btn-primary btn-block'>
+        <input type=submit class='btn btn-primary btn-block'>
     </form>
     {% with messages = get_flashed_messages() %}
         {% if messages %}

@@ -1,6 +1,8 @@
-from app import db, login
+from app import db, app
 from flask_login import UserMixin
 from werkzeug.security import check_password_hash, generate_password_hash
+from datetime import datetime
+import hashlib
 
 
 class User(UserMixin, db.Model):
@@ -12,6 +14,7 @@ class User(UserMixin, db.Model):
     messenger = db.Column(db.String(128))
     password_hash = db.Column(db.String(128))
     programs = db.relationship('Program', backref='user')
+    links = db.relationship('Link', backref='user')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -26,3 +29,14 @@ class Program(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 
+class Link(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(60))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    url = db.Column(db.String(120), default=app.config['URL_FOR_LINK'])
+    hash_str = db.Column(db.String(20), unique=True)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow())
+
+    def generate_hash(self):
+        hash_date = str(self.timestamp).encode('utf-8')
+        self.hash_str = hashlib.sha256(hash_date).hexdigest()[:20]
