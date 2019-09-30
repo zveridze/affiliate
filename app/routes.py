@@ -80,6 +80,7 @@ def links():
     form = LinkForm()
     if form.validate_on_submit():
         link = Link(name=form.name.data, user_id=current_user.id)
+        link.generate_hash()
         db.session.add(link)
         db.session.commit()
         return redirect(url_for('links'))
