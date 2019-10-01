@@ -35,8 +35,8 @@ class Link(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     url = db.Column(db.String(120), default=app.config['URL_FOR_LINK'])
     hash_str = db.Column(db.String(20), unique=True)
-    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow())
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow().replace(microsecond=0))
 
     def generate_hash(self):
-        hash_date = str(self.timestamp).encode('utf-8')
-        self.hash_str = hashlib.sha256(hash_date).hexdigest()[:20]
+        hash_date = str(datetime.utcnow()).encode('utf-8')
+        self.hash_str = hashlib.sha256(hash_date).hexdigest()

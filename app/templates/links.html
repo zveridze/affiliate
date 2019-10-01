@@ -5,15 +5,12 @@
     <form action="" method="post" class="form-inline" role="form" >
         {{ form.hidden_tag() }}
          <div class="form-group mx-sm-3 mb-2">
-            {{ wtf.form_field(form.name, class='form-control', placeholder='Create your affiliate link') }}
+             {{ form.name(placeholder='Link name', class='form-control') }}
          </div>
         <input type=submit class='btn btn-primary mb-2'>
     </form>
     <div class="container-fluid">
     <div class="row">
-    {% if form %}
-
-    {% endif %}
     </div>
     <table class="table table-striped">
     <thead>
