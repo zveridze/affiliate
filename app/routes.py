@@ -1,6 +1,6 @@
-from flask import render_template, redirect, url_for, flash, session
+from flask import render_template, redirect, url_for, flash, session, request
 from flask_login import current_user, login_user, login_required, logout_user
-from app.forms import LoginForm, RegistrationForm, LinkForm
+from app.forms import LoginForm, RegistrationForm, LinkForm, PersonalDataEditForm
 from app import app, db
 from app.models import User, Link
 
@@ -67,10 +67,26 @@ def dashboard():
     return render_template('dashboard.html', user=user, session=session)
 
 
-@app.route('/profile')
+@app.route('/profile', methods=['get', 'post'])
+@login_required
 def profile():
-    user = current_user
-    return render_template('profile.html', user=user)
+    form = PersonalDataEditForm()
+    if form.validate_on_submit():
+        current_user.email = form.email.data
+        current_user.first_name = form.first_name.data
+        current_user.last_name = form.last_name.data
+        current_user.messenger_type = form.messenger_type.data
+        current_user.messenger = form.messenger.data
+        db.session.commit()
+        flash('Your changes have been saved')
+        return redirect(url_for('profile'))
+    elif request.method == 'GET':
+        form.email.data = current_user.email
+        form.first_name.data = current_user.first_name
+        form.last_name.data = current_user.last_name
+        form.messenger_type.data = current_user.messenger_type
+        form.messenger.data = current_user.messenger
+    return render_template('profile.html', form=form)
 
 
 @app.route('/links', methods=['get', 'post'])
