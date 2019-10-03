@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, flash, session, request
+from flask import render_template, redirect, url_for, flash, session, request, jsonify
 from flask_login import current_user, login_user, login_required, logout_user
 from app.forms import LoginForm, RegistrationForm, LinkForm, PersonalDataEditForm
 from app import app, db
@@ -7,7 +7,8 @@ from app.models import User, Link
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    ip = request.remote_addr
+    return render_template('index.html', ip=ip)
 
 
 @app.route('/login', methods=['GET', 'POST'])
