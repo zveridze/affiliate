@@ -26,7 +26,7 @@ class Link(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(60))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    url = db.Column(db.String(120), default=app.config['URL_FOR_LINK'])
+    url = db.Column(db.String(120), default=app.config['URL_FOR_REDIRECT_LINK'])
     hash_str = db.Column(db.String(20), unique=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow().replace(microsecond=0))
     actions = db.relationship('Action', backref='link')
@@ -51,7 +51,7 @@ class Click(db.Model):
     action_id = db.relationship('Action', backref='click')
 
     def is_click_first(self):
-        click = Click.query.filter_by(ip=self.ip)
+        click = Click.query.filter_by(ip=self.ip).first()
         if click:
             self.is_first = False
         else:

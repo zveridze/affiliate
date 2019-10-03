@@ -1,13 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField
 from wtforms.validators import Email, EqualTo, DataRequired, Length
-
-
-MESSENGERS = [('None', 'None'),
-              ('skype', 'Skype'),
-              ('tele', 'Telegram'),
-              ('whatsapp', 'WatsApp'),
-              ('viber', 'Viber')]
+from app import app
 
 
 class LoginForm(FlaskForm):
@@ -21,7 +15,7 @@ class RegistrationForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired()])
     first_name = StringField('First name')
     last_name = StringField('Last name')
-    messenger_type = SelectField('Messenger type', choices=MESSENGERS)
+    messenger_type = SelectField('Messenger type', choices=app.config['MESSENGERS'])
     messenger = StringField('Messenger')
     password = PasswordField('Password', validators=[DataRequired()])
     password2 = PasswordField('Repeat password', validators=[DataRequired(), EqualTo('password')])
@@ -36,7 +30,7 @@ class LinkForm(FlaskForm):
 class PersonalDataEditForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     first_name = StringField('First name')
-    last_name = StringField('Last name',)
-    messenger_type = SelectField('Messenger type', choices=MESSENGERS)
+    last_name = StringField('Last name')
+    messenger_type = SelectField('Messenger type', choices=app.config['MESSENGERS'])
     messenger = StringField('Messenger')
     submit = SubmitField('Save')
