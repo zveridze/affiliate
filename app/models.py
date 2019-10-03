@@ -38,9 +38,9 @@ class Link(db.Model):
 
 class Action(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    link_id = db.Column(db.Integer(128), db.ForeignKey('link.id'))
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow())
-    click_id = db.Column(db.Integer(128), db.ForeignKey('click.id'))
+    link_id = db.Column(db.Integer, db.ForeignKey('link.id'))
+    click_id = db.Column(db.Integer, db.ForeignKey('click.id'))
 
 
 class Click(db.Model):
