@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <H2>All clicks</H2>
+
+    <table class="table table-striped">
+    <thead>
+    <tr>
+        <th scope="col">Link</th>
+        <th scope="col">IP</th>
+        <th scope="col">First</th>
+        <th scope="col">User agent</th>
+        <th scope="col">Time</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for click in clicks %}
+        <tr>
+        <th>{{ click.action_id[0].link.name }}</th>
+        <th>{{ click.ip }}</th>
+        <th>{{ click.is_first }}</th>
+        <th>{{ click.user_agent }}</th>
+        <th>{{ click.action_id[0].timestamp }}</th>
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+{% endblock %}
