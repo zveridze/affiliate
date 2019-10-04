@@ -110,7 +110,7 @@ def redirect_link(hash):
     if link:
         ip = request.remote_addr
         agent = request.headers.get('User-Agent')
-        new_click = Click(ip=ip, user_agent=agent)
+        new_click = Click(ip_address=ip, user_agent=agent)
         new_click.is_click_first()
         db.session.add(new_click)
         db.session.commit()
@@ -124,7 +124,11 @@ def redirect_link(hash):
 @app.route('/reports/all_clicks')
 @login_required
 def all_clicks():
-    clicks = Click.query.join(Action).\
-        join(Link).filter_by(user_id=current_user.id).\
-        order_by(Action.timestamp.desc()).all()
+    clicks = (
+        Click.query
+        .join(Action)
+        .join(Link)
+        .filter_by(user_id=current_user.id)
+        .order_by(Action.timestamp.desc()).all()
+    )
     return render_template('all_clicks.html', clicks=clicks)

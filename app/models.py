@@ -45,13 +45,13 @@ class Action(db.Model):
 
 class Click(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    ip = db.Column(db.String(40), nullable=False)
+    ip_address = db.Column(db.String(40), nullable=False)
     is_first = db.Column(db.Boolean, nullable=False)
     user_agent = db.Column(db.String, nullable=False)
     action_id = db.relationship('Action', backref='click')
 
     def is_click_first(self):
-        click = Click.query.filter_by(ip=self.ip).first()
+        click = Click.query.filter_by(ip_address=self.ip_address).first()
         if click:
             self.is_first = False
         else:
