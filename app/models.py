@@ -1,4 +1,4 @@
-from app import db, app
+from app import db
 from flask_login import UserMixin
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
@@ -26,7 +26,7 @@ class Link(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(60))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    url = db.Column(db.String(120), default=app.config['URL_FOR_REDIRECT_LINK'])
+    site = db.Column(db.String(120), index=True, nullable=False)
     hash_str = db.Column(db.String(20), unique=True)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow().replace(microsecond=0))
     actions = db.relationship('Action', backref='link')
@@ -45,13 +45,13 @@ class Action(db.Model):
 
 class Click(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    ip = db.Column(db.String(40), nullable=False)
+    ip_address = db.Column(db.String(40), nullable=False)
     is_first = db.Column(db.Boolean, nullable=False)
     user_agent = db.Column(db.String, nullable=False)
     action_id = db.relationship('Action', backref='click')
 
     def is_click_first(self):
-        click = Click.query.filter_by(ip=self.ip).first()
+        click = Click.query.filter_by(ip_address=self.ip_address).first()
         if click:
             self.is_first = False
         else:

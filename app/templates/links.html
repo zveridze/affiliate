@@ -6,6 +6,7 @@
         {{ form.hidden_tag() }}
          <div class="form-group mx-sm-3 mb-2">
              {{ form.name(placeholder='Link name', class='form-control') }}
+             {{ form.site(placeholder='Site url', class='form-control') }}
          </div>
         <input type=submit class='btn btn-primary mb-2'>
     </form>
@@ -16,6 +17,7 @@
     <tr>
         <th scope="col">Name</th>
         <th scope="col">Link</th>
+        <th scope="col">Site</th>
         <th scope="col">Date</th>
     </tr>
     </thead>
@@ -23,7 +25,8 @@
     {% for link in links_list %}
         <tr>
         <th>{{ link.name }}</th>
-        <th>{{ link.url }}/{{ link.hash_str }}</th>
+        <th>{{ config['URL_FOR_REDIRECT_LINK'] }}/{{ link.hash_str }}</th>
+        <th>{{ link.site }}</th>
         <th>{{ link.timestamp }}</th>
         </tr>
     {% endfor %}

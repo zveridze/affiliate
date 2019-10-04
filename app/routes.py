@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, flash, session, request, jsonify
+from flask import render_template, redirect, url_for, flash, session, request
 from flask_login import current_user, login_user, login_required, logout_user
 from app.forms import LoginForm, RegistrationForm, LinkForm, PersonalDataEditForm
 from app import app, db
@@ -95,7 +95,7 @@ def links():
     links_list = Link.query.filter_by(user_id=current_user.id).order_by(Link.timestamp.desc()).all()
     form = LinkForm()
     if form.validate_on_submit():
-        link = Link(name=form.name.data, user_id=current_user.id)
+        link = Link(name=form.name.data, site=form.site.data, user_id=current_user.id)
         link.generate_hash()
         db.session.add(link)
         db.session.commit()
@@ -110,7 +110,7 @@ def redirect_link(hash):
     if link:
         ip = request.remote_addr
         agent = request.headers.get('User-Agent')
-        new_click = Click(ip=ip, user_agent=agent)
+        new_click = Click(ip_address=ip, user_agent=agent)
         new_click.is_click_first()
         db.session.add(new_click)
         db.session.commit()
@@ -118,13 +118,17 @@ def redirect_link(hash):
         db.session.add(action)
         db.session.commit()
 
-    return redirect('https://vk.com')
+    return redirect(link.site)
 
 
 @app.route('/reports/all_clicks')
 @login_required
 def all_clicks():
-    clicks = Click.query.join(Action).\
-        join(Link).filter_by(user_id=current_user.id).\
-        order_by(Action.timestamp.desc()).all()
+    clicks = (
+        Click.query
+        .join(Action)
+        .join(Link)
+        .filter_by(user_id=current_user.id)
+        .order_by(Action.timestamp.desc()).all()
+    )
     return render_template('all_clicks.html', clicks=clicks)
