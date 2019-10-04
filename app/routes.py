@@ -1,6 +1,6 @@
 from flask import render_template, redirect, url_for, flash, session, request
 from flask_login import current_user, login_user, login_required, logout_user
-from flask.views import MethodView, View
+from flask.views import MethodView
 from app.forms import LoginForm, RegistrationForm, LinkForm, PersonalDataEditForm
 from app import app, db
 from app.models import User, Link, Click, Action
