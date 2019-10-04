@@ -1,5 +1,6 @@
 from flask import render_template, redirect, url_for, flash, session, request
 from flask_login import current_user, login_user, login_required, logout_user
+from flask.views import MethodView, View
 from app.forms import LoginForm, RegistrationForm, LinkForm, PersonalDataEditForm
 from app import app, db
 from app.models import User, Link, Click, Action
@@ -67,26 +68,30 @@ def dashboard():
     return render_template('dashboard.html', user=user, session=session)
 
 
-@app.route('/profile', methods=['get', 'post'])
-@login_required
-def profile():
-    form = PersonalDataEditForm()
-    if form.validate_on_submit():
-        current_user.email = form.email.data
-        current_user.first_name = form.first_name.data
-        current_user.last_name = form.last_name.data
-        current_user.messenger_type = form.messenger_type.data
-        current_user.messenger = form.messenger.data
-        db.session.commit()
-        flash('Your changes have been saved')
-        return redirect(url_for('profile'))
-    elif request.method == 'GET':
+class ProfileView(MethodView):
+
+    @login_required
+    def get(self):
+        form = PersonalDataEditForm()
         form.email.data = current_user.email
         form.first_name.data = current_user.first_name
         form.last_name.data = current_user.last_name
         form.messenger_type.data = current_user.messenger_type
         form.messenger.data = current_user.messenger
-    return render_template('profile.html', form=form)
+        return render_template('profile.html', form=form)
+
+    @login_required
+    def post(self):
+        form = PersonalDataEditForm()
+        if form.validate_on_submit():
+            current_user.email = form.email.data
+            current_user.first_name = form.first_name.data
+            current_user.last_name = form.last_name.data
+            current_user.messenger_type = form.messenger_type.data
+            current_user.messenger = form.messenger.data
+            db.session.commit()
+            flash('Your changes have been saved')
+            return redirect(url_for('profile'))
 
 
 @app.route('/links', methods=['get', 'post'])
@@ -132,3 +137,6 @@ def all_clicks():
         .order_by(Action.timestamp.desc()).all()
     )
     return render_template('all_clicks.html', clicks=clicks)
+
+
+app.add_url_rule('/profile', view_func=ProfileView.as_view('profile'))
