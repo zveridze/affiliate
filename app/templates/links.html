@@ -4,11 +4,17 @@
 {% block content %}
     <form action="" method="post" class="form-inline" role="form" >
         {{ form.hidden_tag() }}
-         <div class="form-group mx-sm-3 mb-2">
-             {{ form.name(placeholder='Link name', class='form-control') }}
-             {{ form.site(placeholder='Site url', class='form-control') }}
+         <div class="form-row">
+             <div class="col-auto">
+                 {{ form.name(placeholder='Link name', class='form-control mb-2') }}
+             </div>
+             <div class="col-auto">
+                 {{ form.site(placeholder='Site url', class='form-control mb-2') }}
+             </div>
+             <div class="col-auto">
+                 <input type=submit class='btn btn-primary mb-2'>
+             </div>
          </div>
-        <input type=submit class='btn btn-primary mb-2'>
     </form>
     <div class="row">
     </div>
