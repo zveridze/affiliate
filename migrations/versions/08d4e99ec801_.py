@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: cbc29522a9d0
+Revision ID: 08d4e99ec801
 Revises: 
-Create Date: 2019-10-04 12:32:54.016475
+Create Date: 2019-10-04 13:00:09.939987
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'cbc29522a9d0'
+revision = '08d4e99ec801'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -41,13 +41,14 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=60), nullable=True),
     sa.Column('user_id', sa.Integer(), nullable=True),
-    sa.Column('url', sa.String(length=120), nullable=True),
+    sa.Column('site', sa.String(length=120), nullable=False),
     sa.Column('hash_str', sa.String(length=20), nullable=True),
     sa.Column('timestamp', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('hash_str')
     )
+    op.create_index(op.f('ix_link_site'), 'link', ['site'], unique=False)
     op.create_index(op.f('ix_link_timestamp'), 'link', ['timestamp'], unique=False)
     op.create_table('action',
     sa.Column('id', sa.Integer(), nullable=False),
@@ -67,6 +68,7 @@ def downgrade():
     op.drop_index(op.f('ix_action_timestamp'), table_name='action')
     op.drop_table('action')
     op.drop_index(op.f('ix_link_timestamp'), table_name='link')
+    op.drop_index(op.f('ix_link_site'), table_name='link')
     op.drop_table('link')
     op.drop_index(op.f('ix_user_messenger_type'), table_name='user')
     op.drop_index(op.f('ix_user_email'), table_name='user')

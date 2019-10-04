@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, flash, session, request, jsonify
+from flask import render_template, redirect, url_for, flash, session, request
 from flask_login import current_user, login_user, login_required, logout_user
 from app.forms import LoginForm, RegistrationForm, LinkForm, PersonalDataEditForm
 from app import app, db
@@ -95,7 +95,7 @@ def links():
     links_list = Link.query.filter_by(user_id=current_user.id).order_by(Link.timestamp.desc()).all()
     form = LinkForm()
     if form.validate_on_submit():
-        link = Link(name=form.name.data, user_id=current_user.id)
+        link = Link(name=form.name.data, site=form.site.data, user_id=current_user.id)
         link.generate_hash()
         db.session.add(link)
         db.session.commit()
@@ -118,7 +118,7 @@ def redirect_link(hash):
         db.session.add(action)
         db.session.commit()
 
-    return redirect('https://vk.com')
+    return redirect(link.site)
 
 
 @app.route('/reports/all_clicks')

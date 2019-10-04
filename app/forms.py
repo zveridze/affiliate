@@ -24,6 +24,7 @@ class RegistrationForm(FlaskForm):
 
 class LinkForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired(), Length(min=1, max=60)])
+    site = StringField('Site', validators=[DataRequired(), Length(min=1, max=120)])
     submit = SubmitField('New link')
 
 
