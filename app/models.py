@@ -38,21 +38,13 @@ class Link(db.Model):
 
 class Action(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow())
     link_id = db.Column(db.Integer, db.ForeignKey('link.id'))
-    click_id = db.Column(db.Integer, db.ForeignKey('click.id'))
-
-
-class Click(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    type_id = db.Column(db.Integer, nullable=False)
     ip_address = db.Column(db.String(40), nullable=False)
-    is_first = db.Column(db.Boolean, nullable=False)
     user_agent = db.Column(db.String, nullable=False)
-    action_id = db.relationship('Action', backref='click')
+    purchase_amount = db.Column(db.Float)
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow())
 
-    def is_click_first(self):
-        click = Click.query.filter_by(ip_address=self.ip_address).first()
-        if click:
-            self.is_first = False
-        else:
-            self.is_first = True
+    @property
+    def is_first(self):
+        return True

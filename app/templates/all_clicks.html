@@ -2,7 +2,7 @@
 
 {% block content %}
 
-    <H2>All clicks</H2>
+    <H2>All actions</H2>
 
     <table class="table table-striped">
     <thead>
@@ -15,13 +15,13 @@
     </tr>
     </thead>
     <tbody>
-    {% for click in clicks %}
+    {% for action in actions %}
         <tr>
-        <th>{{ click.action_id[0].link.name }}</th>
-        <th>{{ click.ip_address }}</th>
-        <th>{{ click.is_first }}</th>
-        <th>{{ click.user_agent }}</th>
-        <th>{{ click.action_id[0].timestamp }}</th>
+        <th>{{ action.link.name }}</th>
+        <th>{{ action.ip_address }}</th>
+        <th>{{ action.user_agent }}</th>
+        <th>First</th>
+        <th>{{ action.timestamp }}</th>
         </tr>
     {% endfor %}
     </tbody>
