@@ -3,7 +3,8 @@ from flask_login import current_user, login_user, login_required, logout_user
 from flask.views import MethodView
 from app.forms import LoginForm, RegistrationForm, LinkForm, PersonalDataEditForm
 from app import app, db
-from app.models import User, Link, Click, Action
+from app.models import User, Link, Action
+from datetime import datetime
 
 
 @app.route('/')
@@ -115,12 +116,8 @@ def redirect_link(hash):
     if link:
         ip = request.remote_addr
         agent = request.headers.get('User-Agent')
-        new_click = Click(ip_address=ip, user_agent=agent)
-        new_click.is_click_first()
-        db.session.add(new_click)
-        db.session.commit()
-        action = Action(link_id=link.id, click_id=new_click.id)
-        db.session.add(action)
+        new_action = Action(link_id=link.id, type_id=1, ip_address=ip, user_agent=agent, timestamp=datetime.utcnow())
+        db.session.add(new_action)
         db.session.commit()
 
     return redirect(link.site)
@@ -129,14 +126,13 @@ def redirect_link(hash):
 @app.route('/reports/all_clicks')
 @login_required
 def all_clicks():
-    clicks = (
-        Click.query
-        .join(Action)
+    actions = (
+        Action.query
         .join(Link)
         .filter_by(user_id=current_user.id)
         .order_by(Action.timestamp.desc()).all()
     )
-    return render_template('all_clicks.html', clicks=clicks)
+    return render_template('all_clicks.html', actions=actions)
 
 
 app.add_url_rule('/profile', view_func=ProfileView.as_view('profile'))
