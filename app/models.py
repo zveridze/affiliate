@@ -28,7 +28,7 @@ class Link(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     site = db.Column(db.String(120), index=True, nullable=False)
     hash_str = db.Column(db.String(20), unique=True)
-    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow().replace(microsecond=0))
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow())
     actions = db.relationship('Action', backref='link')
 
     def generate_hash(self):
