@@ -5,6 +5,7 @@ from app.forms import LoginForm, RegistrationForm, LinkForm, PersonalDataEditFor
 from app import app, db
 from app.models import User, Link, Action
 from datetime import datetime
+from sqlalchemy import func, distinct
 
 
 @app.route('/')
@@ -132,7 +133,24 @@ def all_clicks():
         .filter_by(user_id=current_user.id)
         .order_by(Action.timestamp.desc()).all()
     )
-    return render_template('all_clicks.html', actions=actions)
+    return render_template('all_actions.html', actions=actions)
+
+
+@app.route('/reports/all_links')
+@login_required
+def all_links():
+    actions = (
+        Action.query.
+        join(Link).
+        filter_by(user_id=current_user.id).
+        with_entities(Link,
+                      func.count(Action.ip_address).label('clicks'),
+                      func.count(distinct(Action.ip_address)).label('unique'),
+                      func.count(Action.purchase_amount).label('purchases'),
+                      func.sum(Action.purchase_amount).label('amount')).
+        group_by(Action.link_id).all()
+    )
+    return render_template('all_links_report.html', actions=actions)
 
 
 app.add_url_rule('/profile', view_func=ProfileView.as_view('profile'))

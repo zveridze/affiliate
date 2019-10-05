@@ -9,8 +9,10 @@
     <tr>
         <th scope="col">Link</th>
         <th scope="col">IP</th>
-        <th scope="col">First</th>
         <th scope="col">User agent</th>
+        <th scope="col">Action Type</th>
+        <th scope="col">First</th>
+        <th scope="col">Purchase amount</th>
         <th scope="col">Time</th>
     </tr>
     </thead>
@@ -19,8 +21,10 @@
         <tr>
         <th>{{ action.link.name }}</th>
         <th>{{ action.ip_address }}</th>
-        <th>First</th>
         <th>{{ action.user_agent }}</th>
+        <th>{{ action.type_id }}</th>
+        <th>First</th>
+        <th>{{ action.purchase_amount }}</th>
         <th>{{ action.timestamp }}</th>
         </tr>
     {% endfor %}

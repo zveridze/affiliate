@@ -22,5 +22,9 @@
                 {% endif %}
             {% endwith %}
         </div>
+        <div class="col-md-4">
+            <a href="{{ url_for('all_clicks') }}">All clicks</a><br>
+            <a href="{{ url_for('all_links') }}">All links</a>
+        </div>
     </div>
 {% endblock %}
