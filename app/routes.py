@@ -80,7 +80,8 @@ class ProfileView(MethodView):
         form.last_name.data = current_user.last_name
         form.messenger_type.data = current_user.messenger_type
         form.messenger.data = current_user.messenger
-        return render_template('profile.html', form=form)
+        links = Link.query.filter_by(user_id=current_user.id).all()
+        return render_template('profile.html', form=form, links=links)
 
     @login_required
     def post(self):
@@ -124,21 +125,21 @@ def redirect_link(hash):
     return redirect(link.site)
 
 
-@app.route('/reports/all_clicks')
+@app.route('/reports/all_actions_report')
 @login_required
-def all_clicks():
+def all_actions_report():
     actions = (
         Action.query
         .join(Link)
         .filter_by(user_id=current_user.id)
         .order_by(Action.timestamp.desc()).all()
     )
-    return render_template('all_actions.html', actions=actions)
+    return render_template('all_actions_report.html', actions=actions)
 
 
-@app.route('/reports/all_links')
+@app.route('/reports/all_links_report')
 @login_required
-def all_links():
+def all_links_report():
     actions = (
         Action.query.
         join(Link).
@@ -151,6 +152,25 @@ def all_links():
         group_by(Action.link_id).all()
     )
     return render_template('all_links_report.html', actions=actions)
+
+
+@app.route('/reports/current_link_report/<link_id>')
+@login_required
+def current_link_report(link_id):
+    link = Link.query.filter_by(id=link_id, user_id=current_user.id).first()
+    if not link:
+        return redirect(url_for('index'))
+    dates = (
+        Action.query.
+        join(Link).
+        filter_by(id=link_id).
+        with_entities(func.strftime("%Y-%m-%d", Action.timestamp).label('date'),
+                      func.count(Action.ip_address).label('actions'),
+                      func.count(distinct(Action.ip_address)).label('unique'),
+                      func.sum(Action.purchase_amount).label('purchases'),
+                      func.count(Action.purchase_amount).label('amount')).
+        group_by(func.strftime("%Y-%m-%d",  Action.timestamp)).all())
+    return render_template('current_link_report.html', dates=dates, link=link)
 
 
 app.add_url_rule('/profile', view_func=ProfileView.as_view('profile'))

@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h2>Detailed statistic: By link "{{ link.name }}"</h2>
+
+    <table class="table table-striped">
+    <thead>
+        <th scope="col">Date</th>
+        <th scope="col">Actions</th>
+        <th scope="col">Unique clicks</th>
+        <th scope="col">Purchases</th>
+        <th scope="col">Purchases amount</th>
+        <th scope="col">Income</th>
+    </thead>
+    <tbody>
+        {% for date in dates %}
+            <tr>
+                <th>{{ date.date }}</th>
+                <th>{{ date.actions }}</th>
+                <th>{{ date.unique }}</th>
+                <th>{{ date.purchases }}</th>
+                <th>{{ date.amount }}</th>
+                <th>Total Income</th>
+            </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+{% endblock %}
