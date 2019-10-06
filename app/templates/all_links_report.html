@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h2>Detailed statistic: By links</h2>
+
+    <table class="table table-striped">
+    <thead>
+        <th scope="col">Name</th>
+        <th scope="col">Site</th>
+        <th scope="col">Clicks</th>
+        <th scope="col">Unique clicks</th>
+        <th scope="col">Purchases</th>
+        <th scope="col">Purchases amount</th>
+        <th scope="col">Income</th>
+    </thead>
+    <tbody>
+        {% for action in actions %}
+            <tr>
+                <th>{{ action.Link.name }}</th>
+                <th>{{ action.Link.site }}</th>
+                <th>{{ action.clicks }}</th>
+                <th>{{ action.unique }}</th>
+                <th>{{ action.purchases }}</th>
+                <th>{{ actions.amount }}</th>
+                <th>Total Income</th>
+            </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+{% endblock %}
