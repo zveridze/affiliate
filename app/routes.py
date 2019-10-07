@@ -176,9 +176,12 @@ def current_link_report(link_id):
 @app.route('/reports/all_days_report')
 @login_required
 def all_days_report():
+    links = Link.query.filter_by(user_id=current_user.id).all()
+    links_id = [link.id for link in links]
+
     sub = (
         Action.query.
-        filter(Action.link_id.in_([1, 2])).
+        filter(Action.link_id.in_(links_id)).
         with_entities(Action.ip_address.label('ip'),
                       Action.link_id.label('name'),
                       func.strftime('%Y-%m-%d', Action.timestamp).label('date')).
