@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h2>Detailed statistic: By days</h2>
+
+    <table class="table table-striped">
+    <thead>
+    <tr>
+        <th scope="col">Date</th>
+        <th scope="col">Actions</th>
+        <th scope="col">Unique</th>
+        <th scope="col">Purchases</th>
+        <th scope="col">Amount</th>
+        <th scope="col">Income</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for date in dates %}
+        <tr>
+        <th>{{ date.date }}</th>
+        <th>{{ date.ip }}</th>
+        <th>{{ date.unique }}</th>
+        <th>{{ date.purchases }}</th>
+        <th>{{ date.amount }}</th>
+        <th>Total Income</th>
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+{% endblock %}
