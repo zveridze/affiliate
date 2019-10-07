@@ -173,4 +173,30 @@ def current_link_report(link_id):
     return render_template('current_link_report.html', dates=dates, link=link)
 
 
+@app.route('/reports/all_days_report')
+@login_required
+def all_days_report():
+    links = Link.query.filter_by(user_id=current_user.id).all()
+    links_id = [link.id for link in links]
+
+    sub = (
+        Action.query.
+        filter(Action.link_id.in_(links_id)).
+        with_entities(Action.ip_address.label('ip'),
+                      Action.link_id.label('name'),
+                      func.strftime('%Y-%m-%d', Action.timestamp).label('date')).
+        group_by(Action.ip_address, Action.link_id).subquery())
+
+    one = db.session.query(func.count(sub.c.ip).label('ip'), sub.c.date.label('date')).subquery()
+
+    dates = (
+        db.session.query(func.count(Action.ip_address).label('ip'),
+                         one.c.ip.label('unique'),
+                         one.c.date.label('date'),
+                         func.sum(Action.purchase_amount).label('purchases'),
+                         func.count(Action.purchase_amount).label('amount')).
+        group_by(func.strftime('%Y-%m-%d', Action.timestamp)).all())
+    return render_template('all_days_report.html', dates=dates)
+
+
 app.add_url_rule('/profile', view_func=ProfileView.as_view('profile'))
