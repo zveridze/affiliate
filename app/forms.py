@@ -35,3 +35,9 @@ class PersonalDataEditForm(FlaskForm):
     messenger_type = SelectField('Messenger type', choices=app.config['MESSENGERS'])
     messenger = StringField('Messenger')
     submit = SubmitField('Save')
+
+
+class ChangePasswordForm(FlaskForm):
+    password = PasswordField('Password', validators=[DataRequired()])
+    password2 = PasswordField('Repeat password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Submit')

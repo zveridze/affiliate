@@ -3,5 +3,33 @@
 {% block title %}{{ user.email }}{% endblock %}
 
 {% block content %}
-    <p>Dashboard for user: {{ current_user.email }}</p>
+    <div class="container-fluid">
+        <h1>Your statistic</h1>
+        <div class="card-deck">
+            <div class="card text-center shadow">
+                <div class="card-body">
+                    <h4 class="card-title">Total clicks</h4>
+                    <p class="card-text lead">{{ data.ip }}</p>
+                </div>
+            </div>
+            <div class="card text-center shadow">
+                <div class="card-body">
+                    <h4 class="card-title">Unique clicks</h4>
+                    <p class="card-text lead">{{ data.unique }}</p>
+                </div>
+            </div>
+            <div class="card text-center shadow">
+                <div class="card-body">
+                    <h4 class="card-title">Total purchases</h4>
+                    <p class="card-text lead">{{ data.purchases }}</p>
+                </div>
+            </div>
+            <div class="card text-center shadow">
+                <div class="card-body">
+                    <h4 class="card-title">Purchases amount</h4>
+                    <p class="card-text lead">{{ data.purchases_amount }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
