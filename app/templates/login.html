@@ -15,6 +15,7 @@
     {% endwith %}
     <div class="d-flex justify-content-center align-items-center container">
         <div class="col-lg-4 align-items-center shadow-lg p-3 mb-5 bg-white rounded">
+            <h3 class="text-center">Login</h3>
             {{ render_form(form, action='', method='post', button_map={'submit': 'primary'}) }}
             <hr>
             <p>Do not have account?<a href="{{ url_for('register') }}"> Signup</a></p>

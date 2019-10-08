@@ -1,7 +1,7 @@
 from flask import render_template, redirect, url_for, flash, session, request
 from flask_login import current_user, login_user, login_required, logout_user
 from flask.views import MethodView
-from app.forms import LoginForm, RegistrationForm, LinkForm, PersonalDataEditForm
+from app.forms import LoginForm, RegistrationForm, LinkForm, PersonalDataEditForm, ChangePasswordForm
 from app import app, db
 from app.models import User, Link, Action
 from datetime import datetime
@@ -63,11 +63,32 @@ def logout():
     return redirect(url_for('index'))
 
 
+@app.route('/change_password', methods=['get', 'post'])
+@login_required
+def change_password():
+    user = User.query.get(current_user.id)
+    form = ChangePasswordForm()
+    if form.validate_on_submit():
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        return redirect('/profile')
+    return render_template('change_password.html', form=form)
+
+
 @app.route('/dashboard')
 @login_required
 def dashboard():
     user = current_user
-    return render_template('dashboard.html', user=user, session=session)
+    data = (
+        Action.query.
+        join(Link).
+        filter_by(user_id=user.id).
+        with_entities(func.count(Action.ip_address).label('ip'),
+                      func.count(distinct(Action.ip_address)).label('unique'),
+                      func.count(Action.purchase_amount).label('purchases'),
+                      func.sum(Action.purchase_amount).label('amount')).first())
+    return render_template('dashboard.html', user=user, data=data)
 
 
 class ProfileView(MethodView):
