@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'main/base.html' %}
 {% from 'bootstrap/form.html' import render_form %}
 
 {% block title %}
@@ -18,7 +18,7 @@
             <h3 class="text-center">Login</h3>
             {{ render_form(form, action='', method='post', button_map={'submit': 'primary'}) }}
             <hr>
-            <p>Do not have account?<a href="{{ url_for('register') }}"> Signup</a></p>
+            <p>Do not have account?<a href="{{ url_for('auth.register') }}"> Signup</a></p>
         </div>
     </div>
 {% endblock %}
