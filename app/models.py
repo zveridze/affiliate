@@ -44,7 +44,3 @@ class Action(db.Model):
     user_agent = db.Column(db.String, nullable=False)
     purchase_amount = db.Column(db.Float)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow())
-
-    @property
-    def is_first(self):
-        return True
