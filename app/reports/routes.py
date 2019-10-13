@@ -40,7 +40,7 @@ def all_links_report():
 def current_link_report(link_id):
     link = Link.query.filter_by(id=link_id, user_id=current_user.id).first()
     if not link:
-        return redirect(url_for('index'))
+        return redirect(url_for('main.index'))
     dates = (
         Action.query.
         join(Link).

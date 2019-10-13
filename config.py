@@ -8,6 +8,7 @@ class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY', 'You will never guess')
     SQLALCHEMY_DATABASE_URI = os.getenv('SQL_ALCHEMY_DATABASE_URL', 'sqlite:///' + os.path.join(basedir, 'db.app'))
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    WTF_CSRF_ENABLED = True
 
     HOST = os.environ.get('HOST', '192.168.1.92')
     PORT = os.environ.get('PORT', 5000)
