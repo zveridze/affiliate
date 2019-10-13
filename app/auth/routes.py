@@ -11,7 +11,7 @@ from app.models import User
 def login():
     print(create_app)
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('main.index'))
     form = LoginForm()
 
     if form.validate_on_submit():
@@ -30,7 +30,7 @@ def login():
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for('index'))
+        return redirect(url_for('main.index'))
     form = RegistrationForm()
 
     if form.validate_on_submit():
@@ -46,13 +46,14 @@ def register():
             db.session.add(user)
             db.session.commit()
             flash('Registration completed successfully')
-            return redirect(url_for('index'))
+            return redirect(url_for('auth.login'))
         else:
             flash('Sorry, email already exist.')
     return render_template('auth/register.html', form=form)
 
 
 @bp.route('/logout')
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('main.index'))

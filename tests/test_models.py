@@ -12,14 +12,12 @@ class TestingConfig(Config):
 class TestModels:
 
     def setup(self):
-        print('1')
         self.app = create_app(Config)
         self.app_context = self.app.app_context()
         self.app_context.push()
         db.create_all()
 
     def teardown(self):
-        print('2')
         db.session.remove()
         db.drop_all()
         self.app_context.pop()

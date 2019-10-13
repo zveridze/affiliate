@@ -9,7 +9,7 @@ from flask_bootstrap import Bootstrap
 db = SQLAlchemy()
 migrate = Migrate()
 login = LoginManager()
-login.login_view = 'index'
+login.login_view = 'auth.login'
 bootstrap = Bootstrap()
 
 
