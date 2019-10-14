@@ -1,4 +1,4 @@
-from app.models import User, Link
+from app.models import User, Link, db
 from datetime import datetime
 
 

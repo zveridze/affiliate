@@ -14,6 +14,12 @@ def app():
     return app
 
 
+@pytest.fixture(scope='session', autouse=True)
+def setup_db(request, app):
+    with app.app_context():
+        db.create_all()
+
+
 @pytest.fixture()
 def setup(request, app):
     app.app_context()
@@ -21,8 +27,3 @@ def setup(request, app):
     app_context.testing = True
     return app_context
 
-
-@pytest.fixture(scope='session', autouse=True)
-def setup_db(request, app):
-    with app.app_context():
-        db.create_all()
