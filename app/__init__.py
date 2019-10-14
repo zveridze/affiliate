@@ -1,12 +1,15 @@
 from flask import Flask
 from config import Config
-from flask_sqlalchemy import SQLAlchemy
+from app.models import db
+from app import models
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_bootstrap import Bootstrap
+from app.auth.routes import auth
+from app.main.routes import main
+from app.report.routes import report
 
 
-db = SQLAlchemy()
 migrate = Migrate()
 login = LoginManager()
 login.login_view = 'auth.login'
@@ -22,17 +25,11 @@ def create_app(config_class=Config):
     login.init_app(app)
     bootstrap.init_app(app)
 
-    from app.auth import bp as auth_bp
-    app.register_blueprint(auth_bp)
-    from app.reports import bp as reports_bp
-    app.register_blueprint(reports_bp)
-    from app.main import bp as main_bp
-    app.register_blueprint(main_bp)
+    app.register_blueprint(auth)
+    app.register_blueprint(main)
+    app.register_blueprint(report)
 
     return app
-
-
-from app import models
 
 
 @login.user_loader
