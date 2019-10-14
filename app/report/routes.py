@@ -1,12 +1,13 @@
-from app.reports import bp
-from app.models import Action, Link
-from app import db
-from flask import render_template, redirect, url_for
+from app.models import Action, Link, db
+from flask import render_template, redirect, url_for, Blueprint
 from flask_login import login_required, current_user
 from sqlalchemy import func, distinct
 
 
-@bp.route('/reports/all_actions_report')
+report = Blueprint('report', __name__)
+
+
+@report.route('/report/all_actions_report')
 @login_required
 def all_actions_report():
     actions = (
@@ -18,7 +19,7 @@ def all_actions_report():
     return render_template('reports/all_actions_report.html', actions=actions)
 
 
-@bp.route('/reports/all_links_report')
+@report.route('/report/all_links_report')
 @login_required
 def all_links_report():
     actions = (
@@ -35,7 +36,7 @@ def all_links_report():
     return render_template('reports/all_links_report.html', actions=actions)
 
 
-@bp.route('/reports/current_link_report/<link_id>')
+@report.route('/report/current_link_report/<link_id>')
 @login_required
 def current_link_report(link_id):
     link = Link.query.filter_by(id=link_id, user_id=current_user.id).first()
@@ -54,7 +55,7 @@ def current_link_report(link_id):
     return render_template('main/current_link_report.html', dates=dates, link=link)
 
 
-@bp.route('/reports/all_days_report')
+@report.route('/report/all_days_report')
 @login_required
 def all_days_report():
     links = Link.query.filter_by(user_id=current_user.id).all()

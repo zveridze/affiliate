@@ -27,15 +27,15 @@
             <h3>Reports</h3>
             <h5>General:</h5>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item"><a href="{{ url_for('reports.all_actions_report') }}">All clicks</a></li>
-                <li class="list-group-item"><a href="{{ url_for('reports.all_links_report') }}">All links</a></li>
-                <li class="list-group-item"><a href="{{ url_for('reports.all_days_report') }}">All days</a></li>
+                <li class="list-group-item"><a href="{{ url_for('report.all_actions_report') }}">All clicks</a></li>
+                <li class="list-group-item"><a href="{{ url_for('report.all_links_report') }}">All links</a></li>
+                <li class="list-group-item"><a href="{{ url_for('report.all_days_report') }}">All days</a></li>
             </ul>
             <p></p>
             <h5>Current link:</h5>
             <ul class="list-group list-group-flush">
                 {% for link in links %}
-                    <li class="list-group-item"><a href="{{ url_for('reports.current_link_report', link_id=link.id) }}">{{ link.name }}</a></li>
+                    <li class="list-group-item"><a href="{{ url_for('report.current_link_report', link_id=link.id) }}">{{ link.name }}</a></li>
                 {% endfor %}
             </ul>
         </div>

@@ -1,20 +1,21 @@
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, Blueprint
 from flask_login import current_user, login_required
 from flask.views import MethodView
 from app.main.forms import LinkForm, PersonalDataEditForm
-from app import db
-from app.main import bp
-from app.models import Link, Action
+from app.models import Link, Action, db
 from datetime import datetime
 from sqlalchemy import func, distinct
 
 
-@bp.route('/')
+main = Blueprint('main', __name__)
+
+
+@main.route('/')
 def index():
     return render_template('main/index.html')
 
 
-@bp.route('/dashboard')
+@main.route('/dashboard')
 @login_required
 def dashboard():
     user = current_user
@@ -56,7 +57,7 @@ class ProfileView(MethodView):
             return redirect(url_for('main.profile'))
 
 
-@bp.route('/links', methods=['get', 'post'])
+@main.route('/links', methods=['get', 'post'])
 @login_required
 def links():
     links_list = Link.query.filter_by(user_id=current_user.id).order_by(Link.timestamp.desc()).all()
@@ -71,7 +72,7 @@ def links():
     return render_template('main/links.html', form=form, links_list=links_list)
 
 
-@bp.route('/redirect_link/<hash>')
+@main.route('/redirect_link/<hash>')
 def redirect_link(hash):
     link = Link.query.filter_by(hash_str=hash).first()
     if link:
@@ -84,4 +85,4 @@ def redirect_link(hash):
     return redirect(link.site)
 
 
-bp.add_url_rule('/profile', view_func=ProfileView.as_view('profile'))
+main.add_url_rule('/profile', view_func=ProfileView.as_view('profile'))

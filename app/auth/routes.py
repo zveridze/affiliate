@@ -1,15 +1,14 @@
-from app.auth import bp
-from app import db
-from app import create_app
-from flask import redirect, url_for, flash, render_template
+from flask import redirect, url_for, flash, render_template, Blueprint
 from flask_login import current_user, login_user, logout_user, login_required
 from app.auth.forms import LoginForm, RegistrationForm, ChangePasswordForm
-from app.models import User
+from app.models import User, db
 
 
-@bp.route('/login', methods=['GET', 'POST'])
+auth = Blueprint('auth', __name__)
+
+
+@auth.route('/login', methods=['GET', 'POST'])
 def login():
-    print(create_app)
     if current_user.is_authenticated:
         return redirect(url_for('main.index'))
     form = LoginForm()
@@ -27,7 +26,7 @@ def login():
     return render_template('auth/login.html', form=form)
 
 
-@bp.route('/register', methods=['GET', 'POST'])
+@auth.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
         return redirect(url_for('main.index'))
@@ -52,14 +51,14 @@ def register():
     return render_template('auth/register.html', form=form)
 
 
-@bp.route('/logout')
+@auth.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('main.index'))
 
 
-@bp.route('/change_password', methods=['get', 'post'])
+@auth.route('/change_password', methods=['get', 'post'])
 @login_required
 def change_password():
     user = User.query.get(current_user.id)
