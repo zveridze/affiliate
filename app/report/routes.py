@@ -46,12 +46,12 @@ def current_link_report(link_id):
         Action.query.
         join(Link).
         filter_by(id=link_id).
-        with_entities(func.strftime("%Y-%m-%d", Action.timestamp).label('date'),
+        with_entities(func.strftime('%Y-%m-%d', Action.timestamp).label('date'),
                       func.count(Action.ip_address).label('actions'),
                       func.count(distinct(Action.ip_address)).label('unique'),
                       func.sum(Action.purchase_amount).label('purchases'),
                       func.count(Action.purchase_amount).label('amount')).
-        group_by(func.strftime("%Y-%m-%d",  Action.timestamp)).all())
+        group_by(func.strftime('%Y-%m-%d',  Action.timestamp)).all())
     return render_template('main/current_link_report.html', dates=dates, link=link)
 
 
