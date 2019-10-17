@@ -72,9 +72,9 @@ def links():
     return render_template('main/links.html', form=form, links_list=links_list)
 
 
-@main.route('/redirect_link/<hash>')
-def redirect_link(hash):
-    link = Link.query.filter_by(hash_str=hash).first()
+@main.route('/redirect_link/<link_hash>')
+def redirect_link(link_hash):
+    link = Link.query.filter_by(hash_str=link_hash).first()
     if link:
         ip = request.remote_addr
         agent = request.headers.get('User-Agent')

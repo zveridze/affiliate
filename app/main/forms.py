@@ -23,4 +23,3 @@ class PersonalDataEditForm(FlaskForm):
     messenger_type = SelectField('Messenger type', choices=MESSENGERS)
     messenger = StringField('Messenger')
     submit = SubmitField('Save')
-
