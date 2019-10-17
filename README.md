@@ -1,1 +1,21 @@
-### Affiliate program
+[![Build Status](https://travis-ci.org/zveridze/affiliate.svg?branch=master)](https://travis-ci.org/zveridze/affiliate)
+
+## CPA network
+
+### How to start
+1. Clone repo
+2. pip install -r requirements.txt
+3. Make ```Flask run```
+
+### Flake8
+You can run flake with ```flake8 .```
+
+### Tests
+You can run tests with ```pytest tests/```
+See [pytest](http://doc.pytest.org/en/latest/usage.html) documentation for information.
+
+### Instruction:
+1. Create user with registration form on /register
+2. Create link for current user on /links
+3. You can add generated link to your promo campaign
+4. After user click and redirect to site system will count a click
