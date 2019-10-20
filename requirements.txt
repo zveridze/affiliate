@@ -7,6 +7,7 @@ flask-bootstrap == 3.3.7.1
 Bootstrap-Flask == 1.1.0
 pytest == 5.2.1
 pytest-cov == 2.8.1
+pytest-flask == 0.15.0
 
 
 pydocstyle==4.0.1
