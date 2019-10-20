@@ -52,6 +52,17 @@ class Link(db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     actions = db.relationship('Action', backref='link')
 
+    def to_dict(self):
+        data = {
+            'id': self.id,
+            'name': self.name,
+            'direct_link': '{}/{}'.format(self.site, self.hash_str),
+            'date_create': self.timestamp,
+            'user_id': self.user_id
+        }
+
+        return data
+
     def generate_hash(self):
         hash_date = str(datetime.utcnow()).encode('utf-8')
         self.hash_str = hashlib.sha256(hash_date).hexdigest()
