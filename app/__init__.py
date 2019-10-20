@@ -8,6 +8,7 @@ from flask_bootstrap import Bootstrap
 from app.auth.routes import auth
 from app.main.routes import main
 from app.report.routes import report
+from app.api.endpoints import api
 
 
 migrate = Migrate()
@@ -28,6 +29,7 @@ def create_app(config_class=Config):
     app.register_blueprint(auth)
     app.register_blueprint(main)
     app.register_blueprint(report)
+    app.register_blueprint(api, url_prefix='/api')
 
     return app
 
