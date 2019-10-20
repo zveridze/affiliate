@@ -18,6 +18,24 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     links = db.relationship('Link', backref='user')
 
+    def to_dict(self):
+        data = {
+            'id': self.id,
+            'email': self.email,
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'messenger_type': self.messenger_type,
+            'messenger': self.messenger
+        }
+
+        return data
+
+    def from_dict(self, data, new=False):
+        for item in data.items():
+            setattr(self, item[0], item[1])
+        if new and 'password' in data:
+            self.set_password(data['password'])
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
