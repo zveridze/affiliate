@@ -8,6 +8,7 @@ from flask_bootstrap import Bootstrap
 from app.auth.routes import auth
 from app.main.routes import main
 from app.report.routes import report
+from app.api.serializer import ma
 from app.api.endpoints import api
 
 
@@ -22,6 +23,7 @@ def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
     db.init_app(app)
+    ma.init_app(app)
     migrate.init_app(app, db)
     login.init_app(app)
     bootstrap.init_app(app)

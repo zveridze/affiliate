@@ -6,8 +6,8 @@ ma = Marshmallow()
 class UserObject(ma.Schema):
 
     class Meta:
-        fields = ('id', 'email', 'first_name', 'last_name', 'messenger_type', 'messenger', 'password_hash')
-        dump_only = ('password_hash', 'email')
+        additional = ('id', 'email', 'first_name', 'last_name', 'messenger_type', 'messenger', 'password')
+        load_only = ('password', )
 
 
 class LinkObject(ma.Schema):
