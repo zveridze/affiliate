@@ -9,7 +9,7 @@ db = SQLAlchemy()
 
 
 class User(UserMixin, db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)  # noqa
     email = db.Column(db.String(128), index=True, unique=True)
     first_name = db.Column(db.String(128))
     last_name = db.Column(db.String(128))
@@ -32,7 +32,7 @@ class User(UserMixin, db.Model):
 
 
 class Link(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)  # noqa
     name = db.Column(db.String(60))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     site = db.Column(db.String(120), index=True, nullable=False)
@@ -46,7 +46,7 @@ class Link(db.Model):
 
 
 class Action(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)  # noqa
     link_id = db.Column(db.Integer, db.ForeignKey('link.id'))
     type_id = db.Column(db.Integer, nullable=False)
     ip_address = db.Column(db.String(40), nullable=False)

@@ -10,8 +10,8 @@ api = Blueprint('api', __name__)
 
 class UserView(MethodView):
 
-    def get(self, id):
-        user = User.query.get_or_404(id)
+    def get(self, user_id):
+        user = User.query.get_or_404(user_id)
         user_obj = UserObject()
         return user_obj.dump(user)
 
@@ -36,9 +36,8 @@ api.add_url_rule('/users/<int:id>', view_func=api_view, methods=['GET'])
 
 class LinkView(MethodView):
 
-    @api.route('/users/<int:id>/links', methods=['GET'])
-    def get(self, id):
-        links = Link.query.filter_by(user_id=id).all()
+    @api.route('/users/<int:user_id>/links', methods=['GET'])
+    def get(self, user_id):
+        links = Link.query.filter_by(user_id=user_id).all()
         links_obj = LinkObject(many=True)
         return jsonify(links_obj.dump(links))
-
