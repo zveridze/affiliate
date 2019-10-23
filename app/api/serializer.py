@@ -8,14 +8,14 @@ ma = Marshmallow()
 class UserObject(ma.Schema):
 
     class Meta:
-        additional = ('id', 'email', 'first_name', 'last_name', 'messenger_type', 'messenger', 'password')
-        load_only = ('password', )
+        additional = ('id', 'email', 'first_name', 'last_name', 'messenger_type', 'messenger', 'password_hash')
+        load_only = ('password_hash', )
 
     @post_load
     def make_user(self, data, **kwargs):
         user = User(**data)
-        if 'password' in data:
-            user.set_password(data['password'])
+        if 'password_hash' in data:
+            user.set_password(data['password_hash'])
 
         return user
 
