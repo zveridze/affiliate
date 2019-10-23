@@ -9,6 +9,10 @@ db = SQLAlchemy()
 
 
 class User(UserMixin, db.Model):
+
+    def __init__(self, *args, **kwargs):
+        super(User, self).__init__(**kwargs)
+
     id = db.Column(db.Integer, primary_key=True)  # noqa
     email = db.Column(db.String(128), index=True, unique=True)
     first_name = db.Column(db.String(128))
@@ -17,12 +21,6 @@ class User(UserMixin, db.Model):
     messenger = db.Column(db.String(128))
     password_hash = db.Column(db.String(128))
     links = db.relationship('Link', backref='user')
-
-    def from_dict(self, data, new=False):
-        for item in data.items():
-            setattr(self, item[0], item[1])
-        if new and 'password' in data:
-            self.set_password(data['password'])
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)

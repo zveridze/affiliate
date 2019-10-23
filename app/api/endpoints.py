@@ -10,23 +10,25 @@ api = Blueprint('api', __name__)
 
 class UserView(MethodView):
 
-    def get(self, user_id):
-        user = User.query.get_or_404(user_id)
+    def get(self, id):
+        user = User.query.get_or_404(id)
         user_obj = UserObject()
         return user_obj.dump(user)
 
     def post(self):
         data = request.get_json()
-        if 'password' not in data or 'email' not in data:
-            return 'Email and password must be defined!'
-        if 'email' in data and User.query.filter_by(email=data['email']).first():
-            return 'Email already used!'
+        # if 'password' not in data or 'email' not in data:
+        #     return 'Email and password must be defined!'
+        # if 'email' in data and User.query.filter_by(email=data['email']).first():
+        #     return 'Email already used!'
         user_obj = UserObject()
-        user = User()
-        user.from_dict(data=user_obj.load(data), new=True)
-        db.session.add(user)
-        db.session.commit()
-        return user_obj.dump(user)
+        user = user_obj.load(data)
+        print(user.email)
+        return jsonify({'1': 1})
+        # user.from_dict(data=user_obj.load(data), new=True)
+        # db.session.add(user)
+        # db.session.commit()
+        # return user_obj.dump(user)
 
 
 api_view = UserView.as_view('api')
