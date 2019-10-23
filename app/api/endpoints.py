@@ -17,13 +17,12 @@ class UserView(MethodView):
 
     def post(self):
         data = request.get_json()
-        if 'password' not in data or 'email' not in data:
+        if 'password_hash' not in data or 'email' not in data:
             return 'Email and password must be defined!'
         if 'email' in data and User.query.filter_by(email=data['email']).first():
             return 'Email already used!'
         user_obj = UserObject()
-        user = User()
-        user.from_dict(data=user_obj.load(data), new=True)
+        user = user_obj.load(data)
         db.session.add(user)
         db.session.commit()
         return user_obj.dump(user)
@@ -31,7 +30,7 @@ class UserView(MethodView):
 
 api_view = UserView.as_view('api')
 api.add_url_rule('/users', view_func=api_view, methods=['POST'])
-api.add_url_rule('/users/<int:id>', view_func=api_view, methods=['GET'])
+api.add_url_rule('/users/<int:user_id>', view_func=api_view, methods=['GET'])
 
 
 class LinkView(MethodView):
