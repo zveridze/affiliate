@@ -10,8 +10,8 @@ api = Blueprint('api', __name__)
 
 class UserView(MethodView):
 
-    def get(self, id):
-        user = User.query.get_or_404(id)
+    def get(self, user_id):
+        user = User.query.get_or_404(user_id)
         user_obj = UserObject()
         return user_obj.dump(user)
 
@@ -30,7 +30,7 @@ class UserView(MethodView):
 
 api_view = UserView.as_view('api')
 api.add_url_rule('/users', view_func=api_view, methods=['POST'])
-api.add_url_rule('/users/<int:id>', view_func=api_view, methods=['GET'])
+api.add_url_rule('/users/<int:user_id>', view_func=api_view, methods=['GET'])
 
 
 class LinkView(MethodView):
