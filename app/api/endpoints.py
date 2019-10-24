@@ -80,11 +80,20 @@ class ActionsList(Resource):
         action_obj = ActionObject()
         return action_obj.dump(actions, many=True)
 
-    def post(self, link_id):
-        data = request.get_json()
+
+class PostBack(Resource):
+
+    def post(self, link_hash):
+        link = Link.query.filter_by(hash_str=link_hash).first()
+        if not link:
+            return 'Not found', 404
+        data = request.args.to_dict()
         action_obj = ActionObject()
-        action = action_obj.make_instance(data=data)
-        action.link_id = link_id
+        action = Action(
+            link_id=link.id,
+            type_id=data['subid1'],
+            purchase_amount=data['subid2']
+        )
         db.session.add(action)
         db.session.commit()
         return action_obj.dump(action)
@@ -95,4 +104,5 @@ api.add_resource(UserDetail, '/users/<int:user_id>')
 api.add_resource(LinksList, '/users/<int:user_id>/links')
 api.add_resource(LinkDetail, '/links/<int:link_id>')
 api.add_resource(ActionsList, '/links/<int:link_id>/actions')
+api.add_resource(PostBack, '/<string:link_hash>/postback', methods=['post'])
 
