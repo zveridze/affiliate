@@ -19,3 +19,10 @@ class Config:
                   ('tele', 'Telegram'),
                   ('whatsapp', 'WatsApp'),
                   ('viber', 'Viber')]
+
+    ACTION_TYPE = {
+        '1': 'Click',
+        '2': 'Add to cart',
+        '3': 'Order',
+        '4': 'Purchase',
+    }

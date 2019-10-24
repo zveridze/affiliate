@@ -47,7 +47,10 @@ class Action(db.Model):
     id = db.Column(db.Integer, primary_key=True)  # noqa
     link_id = db.Column(db.Integer, db.ForeignKey('link.id'))
     type_id = db.Column(db.Integer, nullable=False)
-    ip_address = db.Column(db.String(40), nullable=False)
-    user_agent = db.Column(db.String, nullable=False)
+    ip_address = db.Column(db.String(40))
+    user_agent = db.Column(db.String)
     purchase_amount = db.Column(db.Float)
-    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow())
+    timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+
+    def __init__(self, *args, **kwargs):
+        super(Action, self).__init__(**kwargs)
