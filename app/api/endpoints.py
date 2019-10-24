@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, request
 from app.models import User, Link, Action
 from app import db
 from app.api.serializer import UserObject, LinkObject, ActionObject
@@ -92,7 +92,7 @@ class PostBack(Resource):
         action = Action(
             link_id=link.id,
             type_id=data['subid1'],
-            purchase_amount=data['subid2']
+            purchase_amount=data['subid2'],
         )
         db.session.add(action)
         db.session.commit()
@@ -105,4 +105,3 @@ api.add_resource(LinksList, '/users/<int:user_id>/links')
 api.add_resource(LinkDetail, '/links/<int:link_id>')
 api.add_resource(ActionsList, '/links/<int:link_id>/actions')
 api.add_resource(PostBack, '/<string:link_hash>/postback', methods=['post'])
-

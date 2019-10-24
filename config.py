@@ -24,5 +24,5 @@ class Config:
         '1': 'Click',
         '2': 'Add to cart',
         '3': 'Order',
-        '4': 'Purchase'
+        '4': 'Purchase',
     }
