@@ -1,4 +1,5 @@
 from flask import render_template, redirect, url_for, flash, request, Blueprint
+
 from flask_login import current_user, login_required
 from flask.views import MethodView
 from app.main.forms import LinkForm, PersonalDataEditForm
@@ -82,7 +83,9 @@ def redirect_link(link_hash):
         db.session.add(new_action)
         db.session.commit()
 
-    return redirect(link.site)
+        url = '{0}?partner_id={1}&hash={2}'.format(link.site, 1, link.hash_str)
+
+        return redirect(url)
 
 
 main.add_url_rule('/profile', view_func=ProfileView.as_view('profile'))
