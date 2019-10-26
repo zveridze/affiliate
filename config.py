@@ -21,8 +21,8 @@ class Config:
                   ('viber', 'Viber')]
 
     ACTION_TYPE = {
-        '1': 'Click',
-        '2': 'Add to cart',
-        '3': 'Order',
-        '4': 'Purchase',
+        1: 'Click',
+        2: 'Add to cart',
+        3: 'Order',
+        4: 'Purchase',
     }
