@@ -91,8 +91,10 @@ class PostBack(Resource):
         action_obj = ActionObject()
         action = Action(
             link_id=link.id,
-            type_id=data['subid1'],
-            purchase_amount=data['subid2'],
+            ip_address=data.get('subid1'),
+            user_agent=data.get('subid2'),
+            type_id=data.get('subid3'),
+            purchase_amount=data.get('subid4'),
         )
         db.session.add(action)
         db.session.commit()
@@ -104,4 +106,4 @@ api.add_resource(UserDetail, '/users/<int:user_id>')
 api.add_resource(LinksList, '/users/<int:user_id>/links')
 api.add_resource(LinkDetail, '/links/<int:link_id>')
 api.add_resource(ActionsList, '/links/<int:link_id>/actions')
-api.add_resource(PostBack, '/<string:link_hash>/postback', methods=['post'])
+api.add_resource(PostBack, '/postback/<string:link_hash>', methods=['post'])
