@@ -26,3 +26,5 @@ class Config:
         3: 'Order',
         4: 'Purchase',
     }
+
+    ADVERT_SECRET_KEY = os.environ.get('ADVERT_SECRET_KY', 'You will newer know')

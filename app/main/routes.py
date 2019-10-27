@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, flash, request, Blueprint
+from flask import render_template, redirect, url_for, flash, request, Blueprint, current_app
 from flask_login import current_user, login_required
 from flask.views import MethodView
 from app.main.forms import LinkForm, PersonalDataEditForm
@@ -82,7 +82,10 @@ def redirect_link(link_hash):
         db.session.add(new_action)
         db.session.commit()
 
-        url = '{0}?partner_id={1}&hash={2}'.format(link.site, 1, link.hash_str)
+        url = '{0}?partner_id={1}&hash={2}&k={3}'.format(link.site,
+                                                         1,
+                                                         link.hash_str,
+                                                         current_app.config['ADVERT_SECRET_KEY'])
 
         return redirect(url)
 
