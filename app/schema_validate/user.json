@@ -1,0 +1,28 @@
+{
+  "required": [
+    "email",
+    "password_hash"
+  ],
+  "type": "object",
+  "properties": {
+    "first_name": {
+      "type": "string"
+    },
+    "last_name": {
+      "type": "string"
+    },
+    "messenger_type": {
+      "type": "string"
+    },
+    "messenger": {
+      "type": "string"
+    },
+    "email": {
+      "type": "string",
+      "format": "email"
+    },
+    "password_hash": {
+      "type": "string"
+    }
+  }
+}

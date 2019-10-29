@@ -3,7 +3,7 @@ from app.models import User, Link, Action
 from app import db
 from app.api.serializer import UserObject, LinkObject, ActionObject
 from flask_restful import Api, Resource
-
+from app.schema_validate.schema_validator import validate_data
 
 api_bp = Blueprint('api', __name__)
 api = Api(api_bp)
@@ -18,9 +18,10 @@ class UsersList(Resource):
 
     def post(self):
         data = request.get_json()
-        if 'password_hash' not in data or 'email' not in data:
-            return 'Email and password must be defined!', 400
-        if 'email' in data and User.query.filter_by(email=data['email']).first():
+        result = validate_data(data, 'user.json')
+        if result:
+            return result, 400
+        if User.query.filter_by(email=data['email']).first():
             return 'Email already used!', 400
         user_obj = UserObject()
         user = user_obj.make_instance(data)
