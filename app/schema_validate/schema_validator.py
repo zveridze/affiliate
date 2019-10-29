@@ -17,7 +17,7 @@ def validate_data(data, schema):
     try:
         validate(data, schema_data)
     except ValidationError as exception:
-        return exception.message
+        return exception.args[0]
 
     if validate_email(data['email']) is False:
         return 'Email invalid'
