@@ -19,9 +19,6 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     links = db.relationship('Link', backref='user')
 
-    def __init__(self, *args, **kwargs):
-        super(User, self).__init__(**kwargs)
-
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
