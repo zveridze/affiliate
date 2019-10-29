@@ -1,4 +1,6 @@
 [![Build Status](https://travis-ci.org/zveridze/affiliate.svg?branch=master)](https://travis-ci.org/zveridze/affiliate)
+[![Maintainability](https://api.codeclimate.com/v1/badges/e5ab8a137929d09d98a5/maintainability)](https://codeclimate.com/github/zveridze/affiliate/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/e5ab8a137929d09d98a5/test_coverage)](https://codeclimate.com/github/zveridze/affiliate/test_coverage)
 
 ## CPA network
 
