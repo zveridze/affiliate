@@ -4,7 +4,7 @@ from app import db
 from app.api.serializer import UserObject, LinkObject, ActionObject
 from flask_restful import Api, Resource
 from app.schema_validate.schema_validator import validate_data
-from flask_jwt_extended import create_access_token, jwt_required
+from flask_jwt_extended import create_access_token
 
 api_bp = Blueprint('api', __name__)
 api = Api(api_bp)
