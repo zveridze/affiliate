@@ -4,9 +4,25 @@ from app import db
 from app.api.serializer import UserObject, LinkObject, ActionObject
 from flask_restful import Api, Resource
 from app.schema_validate.schema_validator import validate_data
+from flask_jwt_extended import create_access_token, jwt_required
 
 api_bp = Blueprint('api', __name__)
 api = Api(api_bp)
+
+
+class UserAuthentication(Resource):
+
+    def post(self):
+        user_obj = UserObject()
+        credentials = request.get_json()
+        result = validate_data(credentials, 'auth.json')
+        if result:
+            return result, 400
+        user = User.query.filter_by(email=credentials['email']).first()
+        if not user or not user.check_password(credentials['password']):
+            return 'There is no such user', 400
+        token = create_access_token(identity=user_obj.dump(user))
+        return token
 
 
 class UsersList(Resource):
@@ -102,6 +118,7 @@ class PostBack(Resource):
         return action_obj.dump(action)
 
 
+api.add_resource(UserAuthentication, '/auth')
 api.add_resource(UsersList, '/users')
 api.add_resource(UserDetail, '/users/<int:user_id>')
 api.add_resource(LinksList, '/users/<int:user_id>/links')

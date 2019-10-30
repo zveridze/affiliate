@@ -10,12 +10,14 @@ from app.main.routes import main
 from app.report.routes import report
 from app.api.serializer import ma
 from app.api.endpoints import api_bp
+from flask_jwt_extended import JWTManager
 
 
 migrate = Migrate()
 login = LoginManager()
 login.login_view = 'auth.login'
 bootstrap = Bootstrap()
+jwt = JWTManager()
 
 
 def create_app(config_class=Config):
@@ -27,6 +29,7 @@ def create_app(config_class=Config):
     migrate.init_app(app, db)
     login.init_app(app)
     bootstrap.init_app(app)
+    jwt.init_app(app)
 
     app.register_blueprint(auth)
     app.register_blueprint(main)
