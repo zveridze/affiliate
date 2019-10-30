@@ -28,7 +28,7 @@ def test_user_get(db_context_data, setup):
 
 def test_user_post(setup):
     data = {
-        'email': 'test@mail.ru',
+        'email': 'test_api@mail.ru',
         'password_hash': '123',
         'first_name': 'Some',
         'last_name': 'Test'

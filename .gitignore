@@ -8,6 +8,7 @@ venv.bak/
 .idea
 .idea/
 .coverage
+coverage.xml
 __pycache__/
 db.app
 migrations/
