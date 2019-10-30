@@ -1,5 +1,3 @@
 check:
 	flake8 .
-
-test:
-	py.test
+	py.test -p no:cacheprovider tests/ --cov=app --cov-report=xml
