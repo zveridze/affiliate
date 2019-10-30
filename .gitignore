@@ -7,6 +7,8 @@ env.bak/
 venv.bak/
 .idea
 .idea/
+.coverage
+__pycache__/
 db.app
 migrations/
 
