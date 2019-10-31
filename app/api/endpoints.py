@@ -4,7 +4,7 @@ from app import db
 from app.api.serializer import UserObject, LinkObject, ActionObject
 from flask_restful import Api, Resource
 from app.schema_validate.schema_validator import validate_data
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 
 api_bp = Blueprint('api', __name__)
 api = Api(api_bp)
@@ -25,12 +25,7 @@ class UserAuthentication(Resource):
         return token
 
 
-class UsersList(Resource):
-
-    def get(self):
-        user = User.query.all()
-        user_obj = UserObject()
-        return user_obj.dump(user, many=True), 200
+class UserRegistration(Resource):
 
     def post(self):
         data = request.get_json()
@@ -47,14 +42,31 @@ class UsersList(Resource):
         return user_obj.dump(user), 200
 
 
+class UsersList(Resource):
+
+    @jwt_required
+    def get(self):
+        if get_jwt_identity()['is_admin'] is not True:
+            return 'Forbidden', 403
+        user = User.query.all()
+        user_obj = UserObject()
+        return user_obj.dump(user, many=True), 200
+
+
 class UserDetail(Resource):
 
+    @jwt_required
     def get(self, user_id):
+        if user_id != get_jwt_identity()['id']:
+            return 'Forbidden', 403
         user = User.query.get_or_404(user_id)
         user_obj = UserObject()
         return user_obj.dump(user), 200
 
+    @jwt_required
     def put(self, user_id):
+        if user_id != get_jwt_identity()['id']:
+            return 'Forbidden', 403
         data = request.get_json()
         user_obj = UserObject()
         user = user_obj.load(data=data, instance=User.query.get_or_404(user_id), partial=True)
@@ -64,12 +76,18 @@ class UserDetail(Resource):
 
 class LinksList(Resource):
 
+    @jwt_required
     def get(self, user_id):
+        if user_id != get_jwt_identity()['id']:
+            return 'Forbidden', 403
         links = Link.query.filter_by(user_id=user_id)
         link_obj = LinkObject()
         return link_obj.dump(links, many=True), 200
 
+    @jwt_required
     def post(self, user_id):
+        if user_id != get_jwt_identity()['id']:
+            return 'Forbidden', 403
         data = request.get_json()
         if 'site' not in data or 'name' not in data:
             return 'Site and link name must be define', 400
@@ -84,8 +102,11 @@ class LinksList(Resource):
 
 class LinkDetail(Resource):
 
+    @jwt_required
     def get(self, link_id):
         link = Link.query.get(link_id)
+        if link.user_id != get_jwt_identity()['id']:
+            return 'Forbidden', 403
         link_obj = LinkObject()
         return link_obj.dump(link)
 
@@ -119,6 +140,7 @@ class PostBack(Resource):
 
 
 api.add_resource(UserAuthentication, '/auth')
+api.add_resource(UserRegistration, '/register')
 api.add_resource(UsersList, '/users')
 api.add_resource(UserDetail, '/users/<int:user_id>')
 api.add_resource(LinksList, '/users/<int:user_id>/links')

@@ -8,7 +8,8 @@ class UserObject(ma.ModelSchema):
 
     class Meta:
         model = User
-        additional = ('id', 'email', 'first_name', 'last_name', 'messenger_type', 'messenger', 'password_hash')
+        additional = ('id', 'email', 'first_name', 'last_name',
+                      'messenger_type', 'messenger', 'password_hash', 'is_admin')
         load_only = ('password_hash', )
         exclude = ('links',)
 
