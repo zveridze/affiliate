@@ -16,6 +16,7 @@ class User(UserMixin, db.Model):
     last_name = db.Column(db.String(128))
     messenger_type = db.Column(db.String, index=True)
     messenger = db.Column(db.String(128))
+    is_admin = db.Column(db.Boolean)
     password_hash = db.Column(db.String(128))
     links = db.relationship('Link', backref='user')
 

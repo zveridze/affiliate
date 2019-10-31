@@ -23,6 +23,9 @@
     },
     "password_hash": {
       "type": "string"
+    },
+    "is_admin": {
+      "type": "boolean"
     }
   }
 }

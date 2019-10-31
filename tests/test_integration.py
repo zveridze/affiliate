@@ -1,27 +1,40 @@
 from app import db
 from app.models import User
 import pytest
+from flask_jwt_extended import create_access_token
+from app.api.serializer import UserObject
 import json
 
 
 @pytest.fixture()
 def db_context_data(app):
     with app.app_context():
-        user = User(email='text@mail.ru')
+        user = User(email='text@mail.ru', is_admin=True)
         user.set_password('123')
         db.session.add(user)
-        yield
+        yield user
         db.session.rollback()
 
 
 def test_users_list_get(db_context_data, setup):
-    resp = setup.get(path='/api/users', content_type='application/json')
+    user_obj = UserObject()
+    access_token = create_access_token(identity=user_obj.dump(db_context_data))
+    headers = {
+        'Authorization': 'Bearer {0}'.format(access_token)
+    }
+    resp = setup.get(path='/api/users', content_type='application/json', headers=headers)
     assert len(resp.json) == 1
     assert resp.status_code is 200
 
 
 def test_user_get(db_context_data, setup):
-    resp = setup.get(path='/api/users/1', content_type='application/json')
+    user_obj = UserObject()
+    db_context_data.id = 1
+    access_token = create_access_token(identity=user_obj.dump(db_context_data))
+    headers = {
+        'Authorization': 'Bearer {0}'.format(access_token)
+    }
+    resp = setup.get(path='/api/users/1', content_type='application/json', headers=headers)
     assert resp.json['id'] == 1
     assert resp.status_code is 200
 
@@ -33,8 +46,12 @@ def test_user_post(setup):
         'first_name': 'Some',
         'last_name': 'Test'
     }
-    setup.post(path='/api/users', content_type='application/json', data=json.dumps(data))
-    resp = setup.get(path='/api/users/1', content_type='application/json')
+    user = setup.post(path='/api/register', content_type='application/json', data=json.dumps(data))
+    access_token = create_access_token(identity=user.json)
+    headers = {
+        'Authorization': 'Bearer {0}'.format(access_token)
+    }
+    resp = setup.get(path='/api/users/1', content_type='application/json', headers=headers)
     assert resp.json['email'] == data['email']
     assert resp.json['id'] == 1
 
@@ -45,7 +62,7 @@ def test_user_post_miss_password(setup):
         'first_name': 'Some',
         'last_name': 'Test'
     }
-    resp = setup.post(path='/api/users', content_type='application/json', data=json.dumps(data))
+    resp = setup.post(path='/api/register', content_type='application/json', data=json.dumps(data))
     assert resp.json == '\'password_hash\' is a required property'
     assert resp.status_code == 400
 
@@ -56,6 +73,6 @@ def test_user_post_miss_email(setup):
         'first_name': 'Some',
         'last_name': 'Test'
     }
-    resp = setup.post(path='/api/users', content_type='application/json', data=json.dumps(data))
+    resp = setup.post(path='/api/register', content_type='application/json', data=json.dumps(data))
     assert resp.json == '\'email\' is a required property'
     assert resp.status_code == 400
