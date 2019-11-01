@@ -10,6 +10,22 @@ api_bp = Blueprint('api', __name__)
 api = Api(api_bp)
 
 
+def validate_user_decorator(func):
+    def wrapper(*args, **kwargs):
+        if kwargs['user_id'] != get_jwt_identity()['id']:
+            return 'Forbidden', 403
+        return func(*args, **kwargs)
+    return wrapper
+
+
+def validate_admin_decorator(func):
+    def wrapper(*args, **kwargs):
+        if get_jwt_identity()['is_admin'] is not True:
+            return 'Forbidden', 403
+        return func(*args, **kwargs)
+    return wrapper
+
+
 class UserAuthentication(Resource):
 
     def post(self):
@@ -45,9 +61,8 @@ class UserRegistration(Resource):
 class UsersList(Resource):
 
     @jwt_required
+    @validate_admin_decorator
     def get(self):
-        if get_jwt_identity()['is_admin'] is not True:
-            return 'Forbidden', 403
         user = User.query.all()
         user_obj = UserObject()
         return user_obj.dump(user, many=True), 200
@@ -56,17 +71,15 @@ class UsersList(Resource):
 class UserDetail(Resource):
 
     @jwt_required
+    @validate_user_decorator
     def get(self, user_id):
-        if user_id != get_jwt_identity()['id']:
-            return 'Forbidden', 403
         user = User.query.get_or_404(user_id)
         user_obj = UserObject()
         return user_obj.dump(user), 200
 
     @jwt_required
+    @validate_user_decorator
     def put(self, user_id):
-        if user_id != get_jwt_identity()['id']:
-            return 'Forbidden', 403
         data = request.get_json()
         user_obj = UserObject()
         user = user_obj.load(data=data, instance=User.query.get_or_404(user_id), partial=True)
@@ -77,17 +90,15 @@ class UserDetail(Resource):
 class LinksList(Resource):
 
     @jwt_required
+    @validate_user_decorator
     def get(self, user_id):
-        if user_id != get_jwt_identity()['id']:
-            return 'Forbidden', 403
         links = Link.query.filter_by(user_id=user_id)
         link_obj = LinkObject()
         return link_obj.dump(links, many=True), 200
 
     @jwt_required
+    @validate_user_decorator
     def post(self, user_id):
-        if user_id != get_jwt_identity()['id']:
-            return 'Forbidden', 403
         data = request.get_json()
         if 'site' not in data or 'name' not in data:
             return 'Site and link name must be define', 400
