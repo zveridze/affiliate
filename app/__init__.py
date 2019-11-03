@@ -11,6 +11,8 @@ from app.report.routes import report
 from app.api.serializer import ma
 from app.api.endpoints import api_bp
 from flask_jwt_extended import JWTManager
+from redis import Redis
+import rq
 
 
 migrate = Migrate()
@@ -30,6 +32,8 @@ def create_app(config_class=Config):
     login.init_app(app)
     bootstrap.init_app(app)
     jwt.init_app(app)
+    app.redis = Redis.from_url(app.config['REDIS_URL'])
+    app.task_queue = rq.Queue('affiliate', connection=app.redis)
 
     app.register_blueprint(auth)
     app.register_blueprint(main)

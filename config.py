@@ -10,7 +10,8 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     WTF_CSRF_ENABLED = True
     JWT_SECRET_KEY = os.environ.get('JWT_SECRET_KEY', 'SUPER SECRET')
-    # PROPAGATE_EXCEPTIONS = True
+    PROPAGATE_EXCEPTIONS = True
+    REDIS_URL = os.environ.get('REDIS_URL', 'redis://')
 
     HOST = os.environ.get('HOST', '192.168.1.92')
     PORT = os.environ.get('PORT', 5000)

@@ -6,7 +6,6 @@ from app.models import Link, Action, db
 from datetime import datetime
 from sqlalchemy import func, distinct
 
-
 main = Blueprint('main', __name__)
 
 
@@ -34,6 +33,7 @@ class ProfileView(MethodView):
 
     @login_required
     def get(self):
+        current_app.task_queue.enqueue('app.tasks.links_report_task', 5)
         form = PersonalDataEditForm()
         form.email.data = current_user.email
         form.first_name.data = current_user.first_name
