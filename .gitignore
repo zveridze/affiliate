@@ -12,5 +12,5 @@ coverage.xml
 __pycache__/
 db.app
 migrations/
-
+*.csv
 
