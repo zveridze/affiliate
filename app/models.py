@@ -3,6 +3,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
 import hashlib
 from flask_sqlalchemy import SQLAlchemy
+from flask import current_app
 
 
 db = SQLAlchemy()
@@ -25,6 +26,9 @@ class User(UserMixin, db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+    def get_report(self):
+        current_app.task_queue.enqueue('app.tasks.links_report_task', self.id)
 
 
 class Link(db.Model):
