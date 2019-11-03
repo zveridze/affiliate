@@ -6,7 +6,6 @@ from app.models import Link, Action, db
 from datetime import datetime
 from sqlalchemy import func, distinct
 
-
 main = Blueprint('main', __name__)
 
 
