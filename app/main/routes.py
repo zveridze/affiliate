@@ -59,7 +59,12 @@ class ProfileView(MethodView):
 @main.route('/links', methods=['get', 'post'])
 @login_required
 def links():
-    links_list = Link.query.filter_by(user_id=current_user.id).order_by(Link.timestamp.desc()).all()
+    page = request.args.get('page', 1, type=int)
+    links_list = (
+        Link.query
+        .filter_by(user_id=current_user.id)
+        .order_by(Link.timestamp.desc())
+        .paginate(page=page, per_page=25))
     form = LinkForm()
     if form.validate_on_submit():
         link = Link(name=form.name.data, site=form.site.data, user_id=current_user.id)
@@ -67,8 +72,14 @@ def links():
         db.session.add(link)
         db.session.commit()
         return redirect(url_for('main.links'))
-
-    return render_template('main/links.html', form=form, links_list=links_list)
+    prev_page = url_for('main.links', page=links_list.prev_num) if links_list.has_prev else None
+    next_page = url_for('main.links', page=links_list.next_num) if links_list.has_next else None
+    return render_template('main/links.html',
+                           form=form,
+                           links_list=links_list.items,
+                           prev=prev_page,
+                           next=next_page,
+                           )
 
 
 @main.route('/redirect_link/<link_hash>')
