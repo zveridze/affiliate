@@ -1,5 +1,8 @@
 import sqlite3
 from datetime import datetime
+import os
+
+PATH_TO_DB = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'db.app')
 
 
 def link_obj(iter):
@@ -32,7 +35,7 @@ def action_obj(item):
 
 
 def links_generator(item):
-    conn = sqlite3.connect('db.app')
+    conn = sqlite3.connect(PATH_TO_DB)
 
     for i in range(item):
         link = link_obj(i)
@@ -48,16 +51,16 @@ def links_generator(item):
 
 
 def actions_generator(item):
-    conn = sqlite3.connect('db.app')
+    conn = sqlite3.connect(PATH_TO_DB)
 
     for i in range(item):
-        link = action_obj(i)
+        action = action_obj(i)
         conn.execute(
             '''
             INSERT INTO Action (link_id, type_id, ip_address, user_agent, purchase_amount, timestamp)
             VALUES (?, ?, ?, ?, ?, ?);
-            ''', (link[0]['link_id'], link[0]['type_id'], link[0]['ip_address'],
-                  link[0]['user_agent'], link[0]['purchase_amount'], link[0]['timestamp'])
+            ''', (action[0]['link_id'], action[0]['type_id'], action[0]['ip_address'],
+                  action[0]['user_agent'], action[0]['purchase_amount'], action[0]['timestamp'])
         )
 
     conn.commit()
