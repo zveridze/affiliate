@@ -101,7 +101,7 @@ def all_days_report():
                          action_count.c.first.label('first'),
                          func.count(Action.ip_address).label('ip'),
                          func.sum(Action.purchase_amount).label('purchases'),
-                         func.count(Action.purchase_amount).label('amount')
+                         func.count(Action.purchase_amount).label('amount'),
                          ).filter(Action.link_id.in_(links_id)).
         outerjoin(action_count, (action_count.c.date == func.strftime('%Y-%m-%d', Action.timestamp))).
         group_by(func.strftime('%Y-%m-%d', Action.timestamp)).all())
