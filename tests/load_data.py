@@ -34,7 +34,7 @@ def action_obj(item):
     return inserted_data
 
 
-def links_generator(item):
+def links_generator(item=20000):
     conn = sqlite3.connect(PATH_TO_DB)
 
     for i in range(item):
@@ -50,7 +50,7 @@ def links_generator(item):
     conn.close()
 
 
-def actions_generator(item):
+def actions_generator(item=20000):
     conn = sqlite3.connect(PATH_TO_DB)
 
     for i in range(item):
