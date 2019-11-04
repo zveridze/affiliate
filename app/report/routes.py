@@ -83,21 +83,26 @@ def all_days_report():
     links = Link.query.filter_by(user_id=current_user.id).all()
     links_id = [link.id for link in links]
 
-    sub = (
+    action = (
         Action.query.
         filter(Action.link_id.in_(links_id)).
-        with_entities(Action.ip_address.label('ip'),
-                      Action.link_id.label('name'),
+        with_entities(Action.ip_address.label('ip_address'),
+                      Action.link_id.label('link_id'),
                       func.strftime('%Y-%m-%d', Action.timestamp).label('date')).
-        group_by(Action.ip_address, Action.link_id).subquery())
+        group_by(Action.link_id, Action.ip_address).subquery())
 
-    one = db.session.query(func.count(sub.c.ip).label('ip'), sub.c.date.label('date')).subquery()
+    action_count = (
+        db.session.query(func.count(action.c.ip_address).label('first'),
+                         action.c.date.label('date')).
+        group_by(action.c.date).subquery())
 
     dates = (
-        db.session.query(func.count(Action.ip_address).label('ip'),
-                         one.c.ip.label('unique'),
-                         one.c.date.label('date'),
+        db.session.query(func.strftime('%Y-%m-%d', Action.timestamp).label('date'),
+                         action_count.c.first.label('first'),
+                         func.count(Action.ip_address).label('ip'),
                          func.sum(Action.purchase_amount).label('purchases'),
-                         func.count(Action.purchase_amount).label('amount')).
+                         func.count(Action.purchase_amount).label('amount'),
+                         ).filter(Action.link_id.in_(links_id)).
+        outerjoin(action_count, (action_count.c.date == func.strftime('%Y-%m-%d', Action.timestamp))).
         group_by(func.strftime('%Y-%m-%d', Action.timestamp)).all())
     return render_template('reports/all_days_report.html', dates=dates)
