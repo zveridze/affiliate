@@ -37,7 +37,7 @@ def action_obj(item):
 def links_generator(item):
     conn = sqlite3.connect(PATH_TO_DB)
 
-    for i in range(10001, item):
+    for i in range(item):
         link = link_obj(i)
         conn.execute(
             '''
@@ -65,6 +65,3 @@ def actions_generator(item):
 
     conn.commit()
     conn.close()
-
-
-links_generator(20000)
