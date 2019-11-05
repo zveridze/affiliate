@@ -13,4 +13,3 @@ __pycache__/
 db.app
 migrations/
 *.csv
-
