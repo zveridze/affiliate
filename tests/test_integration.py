@@ -7,7 +7,7 @@ import json
 
 
 @pytest.fixture()
-def db_context_data(app):
+def test_user_create(app):
     with app.app_context():
         user = User(email='text@mail.ru', is_admin=True)
         user.set_password('123')
@@ -16,9 +16,9 @@ def db_context_data(app):
         db.session.rollback()
 
 
-def test_users_list_get(db_context_data, setup):
+def test_users_list_get(test_user_create, setup):
     user_obj = UserObject()
-    access_token = create_access_token(identity=user_obj.dump(db_context_data))
+    access_token = create_access_token(identity=user_obj.dump(test_user_create))
     headers = {
         'Authorization': 'Bearer {0}'.format(access_token)
     }
@@ -27,10 +27,10 @@ def test_users_list_get(db_context_data, setup):
     assert resp.status_code is 200
 
 
-def test_user_get(db_context_data, setup):
+def test_user_get(test_user_create, setup):
     user_obj = UserObject()
-    db_context_data.id = 1
-    access_token = create_access_token(identity=user_obj.dump(db_context_data))
+    test_user_create.id = 1
+    access_token = create_access_token(identity=user_obj.dump(test_user_create))
     headers = {
         'Authorization': 'Bearer {0}'.format(access_token)
     }
