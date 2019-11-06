@@ -14,7 +14,7 @@ You can run flake with ```flake8 .```
 
 ### Tests
 You can run tests with ```pytest tests/```
-See [pytest](http://doc.pytest.org/en/latest/usage.html) documentation for information.
+See [pytest](http://doc.pytest.org/en/latest/usage.html) documentation for more information.
 
 ### Instruction:
 1. Create user with registration form on /register
@@ -23,6 +23,8 @@ See [pytest](http://doc.pytest.org/en/latest/usage.html) documentation for infor
 4. After user click and redirect to site system will count a click
 
 ### Redis using docker
-1. First you need to start Redis Server in Docker container ```run --name %set your name% -p %set your ports% -d redis```
-2. Second you need start RQ worker ```rq worker %your Redis Server name%```
-3. That`s all. Now you can send tasks to the queue. 
+1. First you need to start Redis Server in Docker container make in terminal ```run --name %set your name% -p %set your ports% -d redis```
+2. Second you need start RQ worker use your second terminal window to make ```rq worker %your Redis Server name%```
+3. Third possibly you want access to your redis with cli, so you can make ```docker exec -it affiliate sh``` and than ```docker-cli```
+4. For redis scheduler you must make ```rqscheduler```
+5. That`s all. Now you can send tasks to the queue.
