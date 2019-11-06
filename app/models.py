@@ -27,8 +27,15 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+    def user_caching_report(self):
+        current_app.scheduler.schedule(scheduled_time=datetime.utcnow(),
+                                       func='app.redis_tasks.caching_report',
+                                       args=[self.id],
+                                       interval=600
+                                       )
+
     def get_report(self):
-        current_app.task_queue.enqueue('app.tasks.links_report_task', self.id)
+        current_app.task_queue.enqueue('app.redis_tasks.links_report_task', self.id)
 
 
 class Link(db.Model):
