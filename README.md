@@ -21,3 +21,8 @@ See [pytest](http://doc.pytest.org/en/latest/usage.html) documentation for infor
 2. Create link for current user on /links
 3. You can add generated link to your promo campaign
 4. After user click and redirect to site system will count a click
+
+### Redis using docker
+1. First you need to start Redis Server in Docker container ```run --name %set your name% -p %set your ports% -d redis```
+2. Second you need start RQ worker ```rq worker %your Redis Server name%```
+3. That`s all. Now you can send tasks to the queue. 
