@@ -1,7 +1,7 @@
 from flask import Flask
 from config import Config
 from app.models import db
-from app import models, db
+from app import models
 from flask_migrate import Migrate
 from flask_login import LoginManager
 from flask_bootstrap import Bootstrap

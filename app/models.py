@@ -27,11 +27,18 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+    def get_user_cached_report(self):
+        report = current_app.redis.get(self.id)
+        if not report:
+            self.user_caching_report()
+            return
+        return report
+
     def user_caching_report(self):
         current_app.scheduler.schedule(scheduled_time=datetime.utcnow(),
                                        func='app.redis_tasks.caching_report',
                                        args=[self.id],
-                                       interval=600
+                                       interval=600,
                                        )
 
     def get_report(self):

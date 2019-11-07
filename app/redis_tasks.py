@@ -20,7 +20,6 @@ def links_report_task(user_id):
 
 
 def caching_report(user_id):
-    print('start caching')
     try:
         bytes(user_id)
     except TypeError:
@@ -28,8 +27,9 @@ def caching_report(user_id):
 
     user = User.query.get(user_id)
     action_obj = ActionObject()
+    actions_list = []
     for link in user.links:
         for action in link.actions:
-            dict_actions = action_obj.dump(action)
-            redis_client.append(user_id, json.dumps(dict_actions))
-    return redis_client.get('1')
+            actions_list.append(action_obj.dump(action))
+
+    redis_client.set(user_id, json.dumps(actions_list))
