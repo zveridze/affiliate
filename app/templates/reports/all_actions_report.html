@@ -4,6 +4,11 @@
 
     <h2>Detailed statistic: By actions</h2>
 
+    {% if not actions %}
+        <div class="container h-100 d-flex justify-content-center">
+        <h4 class="text-center" style="height: 100px">Your report is preparing. Soon all will be ready!</h4>
+        </div>
+    {% else %}
     <table class="table table-striped">
     <thead>
     <tr>
@@ -29,4 +34,5 @@
     </tbody>
     </table>
     {% include '_pagination.html' %}
+    {% endif %}
 {% endblock %}

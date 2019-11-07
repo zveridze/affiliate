@@ -1,5 +1,6 @@
 from flask_marshmallow import Marshmallow
 from app.models import User, Link, Action
+from app import db
 
 ma = Marshmallow()
 
@@ -22,6 +23,7 @@ class LinkObject(ma.ModelSchema):
 
 
 class ActionObject(ma.ModelSchema):
-
     class Meta:
         model = Action
+        fields = ('id', 'link_id', 'type_id', 'ip_address', 'user_agent', 'purchase_amount', 'timestamp')
+        sqla_session = db.session

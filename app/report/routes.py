@@ -2,6 +2,7 @@ from app.models import Action, Link, db
 from flask import render_template, redirect, url_for, Blueprint, request
 from flask_login import login_required, current_user
 from sqlalchemy import func, distinct
+from app.api.serializer import ActionObject
 
 report = Blueprint('report', __name__)
 
@@ -9,24 +10,16 @@ report = Blueprint('report', __name__)
 @report.route('/report/all_actions_report')
 @login_required
 def all_actions_report():
-    current_user.user_caching_report()
 
-    page = request.args.get('page', 1, type=int)
-    actions = (
-        Action.query
-        .join(Link)
-        .filter_by(user_id=current_user.id)
-        .order_by(Action.timestamp.desc())
-        .paginate(page=page, per_page=25)
-    )
+    report_data = current_user.get_user_cached_report()
+    actions = []
+    if report_data:
+        action_obj = ActionObject()
+        actions = action_obj.loads(report_data, many=True)
+    else:
+        current_user.user_caching_report()
 
-    prev_page = url_for('report.all_actions_report', page=actions.prev_num) if actions.has_prev else None
-    next_page = url_for('report.all_actions_report', page=actions.next_num) if actions.has_next else None
-    return render_template('reports/all_actions_report.html',
-                           actions=actions.items,
-                           prev=prev_page,
-                           next=next_page,
-                           )
+    return render_template('reports/all_actions_report.html', actions=actions)
 
 
 @report.route('/report/all_links_report')
